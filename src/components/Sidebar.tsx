@@ -15,28 +15,32 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [levelProgresses, setLevelProgresses] = useState<Record<string, number>>({});
 
-  useEffect(() => {
+  const refreshProgress = () => {
     const progress = loadProgress();
     setCompletedLessons(progress.completedLessons);
+    const lp: Record<string, number> = {};
+    levels.forEach((level) => {
+      lp[level.id] = getLevelProgress(level.id);
+    });
+    setLevelProgresses(lp);
+  };
 
-    const handleStorage = () => {
-      const updated = loadProgress();
-      setCompletedLessons(updated.completedLessons);
-    };
+  useEffect(() => {
+    refreshProgress();
 
-    window.addEventListener("storage", handleStorage);
-    window.addEventListener("progress-update", handleStorage);
+    window.addEventListener("storage", refreshProgress);
+    window.addEventListener("progress-update", refreshProgress);
     return () => {
-      window.removeEventListener("storage", handleStorage);
-      window.removeEventListener("progress-update", handleStorage);
+      window.removeEventListener("storage", refreshProgress);
+      window.removeEventListener("progress-update", refreshProgress);
     };
   }, []);
 
   // Refresh on pathname change
   useEffect(() => {
-    const progress = loadProgress();
-    setCompletedLessons(progress.completedLessons);
+    refreshProgress();
   }, [pathname]);
 
   return (
@@ -70,7 +74,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto p-4 space-y-5">
             {levels.map((level) => {
-              const levelProgress = getLevelProgress(level.id);
+              const levelProgress = levelProgresses[level.id] || 0;
               const isCurrentLevel = pathname.includes(`/level/${level.id}`);
 
               return (

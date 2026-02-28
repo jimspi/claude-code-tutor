@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProgressProvider } from "@/contexts/ProgressProvider";
 
 const heading = Plus_Jakarta_Sans({
   variable: "--font-heading",
@@ -39,7 +41,11 @@ export default function RootLayout({
       <body
         className={`${heading.variable} ${body.variable} font-body antialiased text-stone-800`}
       >
-        <AppShell>{children}</AppShell>
+        <AuthProvider>
+          <ProgressProvider>
+            <AppShell>{children}</AppShell>
+          </ProgressProvider>
+        </AuthProvider>
       </body>
     </html>
   );

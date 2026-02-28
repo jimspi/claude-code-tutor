@@ -19,6 +19,14 @@ export const metadata: Metadata = {
   title: "Claude Code Academy — Learn to Build with AI",
   description:
     "A step-by-step interactive learning platform that teaches you how to use Claude Code, from absolute beginner to confident builder.",
+  icons: {
+    icon: [
+      { url: "/favicon.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({

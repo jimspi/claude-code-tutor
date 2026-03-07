@@ -7,6 +7,7 @@ import { getLessonContent } from "@/lib/content";
 import LessonRenderer from "@/components/LessonRenderer";
 import LessonComplete from "@/components/LessonComplete";
 import TryItForReal from "@/components/TryItForReal";
+import AudioReader from "@/components/AudioReader";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthButton from "@/components/AuthButton";
 
@@ -104,6 +105,9 @@ export default function LessonPage() {
       <div className="mt-12 pt-8 border-t border-stone-200">
         <LessonComplete lessonId={lessonId} />
       </div>
+
+      {/* Audio reader */}
+      <AudioReader blocks={content.blocks} />
 
       {/* Navigation */}
       <div className="mt-8 flex items-center justify-between gap-4">

@@ -18,6 +18,7 @@ import ClaudeConversation from "./ClaudeConversation";
 import PromptBuilder from "./PromptBuilder";
 import QuizBlock from "./QuizBlock";
 import DragRankExercise from "./DragRankExercise";
+import PromptHackDemo from "./PromptHackDemo";
 
 interface LessonRendererProps {
   blocks: ContentBlock[];
@@ -159,6 +160,8 @@ export default function LessonRenderer({ blocks }: LessonRendererProps) {
                 feedback={block.feedback}
               />
             );
+          case "prompt-hack-demo":
+            return <PromptHackDemo key={i} />;
           case "divider":
             return <hr key={i} className="my-8 border-stone-200" />;
           default:

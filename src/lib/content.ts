@@ -54,7 +54,8 @@ export type ContentBlock =
       items: { id: string; text: string }[];
       correctOrder: string[];
       feedback: string;
-    };
+    }
+  | { type: "prompt-hack-demo" };
 
 export type ClaudeConversationStep =
   | { role: "user"; message: string; suggested?: boolean }
@@ -841,6 +842,31 @@ export const lessonContent: Record<string, LessonContent> = {
         type: "exercise",
         prompt: "\"Fix the page.\"",
         reveal: "\"The About page isn't displaying correctly on mobile devices. The text is overflowing off the screen and the images are too large. Make it responsive so it looks good on phones, tablets, and desktops.\"",
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "subheading",
+        text: "The Prompt Hack: Let Claude Write Your Prompts",
+      },
+      {
+        type: "paragraph",
+        text: "Here's a trick that sounds almost too easy to work: use Claude to write your Claude Code prompts. Instead of struggling to describe exactly what you want, go to claude.ai and tell Claude what you're trying to build. Ask it to write a detailed prompt that you can paste into Claude Code.",
+      },
+      {
+        type: "paragraph",
+        text: "The workflow is simple: open Claude in your browser, tell it you need a prompt for Claude Code, describe what you want in plain language, copy the prompt it generates, and paste it into Claude Code. Claude is better at writing structured, detailed prompts than most humans — so you get a better result with less effort.",
+      },
+      {
+        type: "prompt-hack-demo",
+      },
+      {
+        type: "tip",
+        text: "This works because Claude understands what makes a good prompt. It will add structure, specificity, and technical details you might not think of. You don't need to be a prompt expert — you just need to know what you want to build.",
+      },
+      {
+        type: "divider",
       },
       {
         type: "tip",

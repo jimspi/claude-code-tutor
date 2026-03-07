@@ -6,6 +6,7 @@ import { getLevelById, getLessonById, getAdjacentLessons } from "@/lib/levels";
 import { getLessonContent } from "@/lib/content";
 import LessonRenderer from "@/components/LessonRenderer";
 import LessonComplete from "@/components/LessonComplete";
+import TryItForReal from "@/components/TryItForReal";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthButton from "@/components/AuthButton";
 
@@ -95,6 +96,9 @@ export default function LessonPage() {
       <article>
         <LessonRenderer blocks={content.blocks} />
       </article>
+
+      {/* Try it for real nudge */}
+      <TryItForReal lessonId={lessonId} />
 
       {/* Complete button */}
       <div className="mt-12 pt-8 border-t border-stone-200">

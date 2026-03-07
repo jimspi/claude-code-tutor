@@ -6,17 +6,46 @@ import { getOverallProgress, getLevelProgress, loadProgress } from "@/lib/progre
 import ProgressBar from "@/components/ProgressBar";
 import Badge from "@/components/Badge";
 import Link from "next/link";
+import WelcomeModal, { hasSeenWelcome } from "@/components/WelcomeModal";
+import QuickReview from "@/components/QuickReview";
+
+function getContinueLink(completedLessons: string[]): { levelId: string; lessonId: string; label: string } | null {
+  // Find the first incomplete lesson
+  for (const level of levels) {
+    for (const lesson of level.lessons) {
+      if (!completedLessons.includes(lesson.id)) {
+        return {
+          levelId: level.id,
+          lessonId: lesson.id,
+          label: `Level ${level.number}: ${lesson.title}`,
+        };
+      }
+    }
+  }
+  return null; // All complete
+}
+
+function getTotalMinutes(): number {
+  return levels.reduce(
+    (sum, level) =>
+      sum + level.lessons.reduce((s, l) => s + l.estimatedMinutes, 0),
+    0
+  );
+}
 
 export default function HomePage() {
   const [overall, setOverall] = useState(0);
   const [earnedBadges, setEarnedBadges] = useState<string[]>([]);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [levelProgresses, setLevelProgresses] = useState<Record<string, number>>({});
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     const update = () => {
       setOverall(getOverallProgress());
       const progress = loadProgress();
       setEarnedBadges(progress.earnedBadges);
+      setCompletedLessons(progress.completedLessons);
       const lp: Record<string, number> = {};
       levels.forEach((l) => {
         lp[l.id] = getLevelProgress(l.id);
@@ -24,12 +53,27 @@ export default function HomePage() {
       setLevelProgresses(lp);
     };
     update();
+
+    // Show welcome modal for first-time visitors
+    if (!hasSeenWelcome()) {
+      setShowWelcome(true);
+    }
+
     window.addEventListener("progress-update", update);
     return () => window.removeEventListener("progress-update", update);
   }, []);
 
+  const continueLink = getContinueLink(completedLessons);
+  const totalMinutes = getTotalMinutes();
+  const totalHours = Math.round(totalMinutes / 60);
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      {/* Welcome Modal */}
+      {showWelcome && (
+        <WelcomeModal onClose={() => setShowWelcome(false)} />
+      )}
+
       {/* Hero */}
       <div className="mb-12">
         <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight">
@@ -40,6 +84,9 @@ export default function HomePage() {
           Learn to build real software by having conversations with AI. No
           coding experience needed. Start from zero and become a confident
           builder, one lesson at a time.
+        </p>
+        <p className="text-sm text-stone-400 mt-2">
+          {levels.reduce((s, l) => s + l.lessons.length, 0)} lessons &middot; About {totalHours} hours total
         </p>
 
         {/* Overall progress */}
@@ -61,6 +108,32 @@ export default function HomePage() {
             </div>
           )}
         </div>
+
+        {/* Continue where you left off */}
+        {continueLink && completedLessons.length > 0 && (
+          <Link
+            href={`/level/${continueLink.levelId}/${continueLink.lessonId}`}
+            className="mt-4 flex items-center justify-between p-4 rounded-xl bg-teal-50 border border-teal-200 hover:bg-teal-100 transition-colors group"
+          >
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-teal-600 mb-0.5">
+                Continue where you left off
+              </p>
+              <p className="text-sm font-medium text-teal-900">
+                {continueLink.label}
+              </p>
+            </div>
+            <svg
+              className="w-5 h-5 text-teal-400 group-hover:text-teal-600 transition-colors"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        )}
       </div>
 
       {/* Levels */}
@@ -68,6 +141,7 @@ export default function HomePage() {
         {levels.map((level) => {
           const progress = levelProgresses[level.id] || 0;
           const isComplete = progress === 100;
+          const totalMins = level.lessons.reduce((s, l) => s + l.estimatedMinutes, 0);
 
           return (
             <Link
@@ -96,7 +170,7 @@ export default function HomePage() {
                       {level.title}
                     </h2>
                     <p className="text-sm text-stone-500 mt-1">
-                      {level.lessons.length} lessons
+                      {level.lessons.length} lessons &middot; ~{totalMins} min
                     </p>
                   </div>
                   <div className="flex-shrink-0 flex flex-col items-end gap-2">
@@ -132,6 +206,9 @@ export default function HomePage() {
           );
         })}
       </div>
+
+      {/* Quick Review flashcards */}
+      <QuickReview completedLessons={completedLessons} />
 
       {/* Footer note */}
       <div className="mt-12 text-center text-sm text-stone-400">

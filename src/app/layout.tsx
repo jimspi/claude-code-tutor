@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Source_Sans_3 } from "next/font/google";
+import { Plus_Jakarta_Sans, Source_Sans_3, Fira_Code } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -15,6 +15,12 @@ const body = Source_Sans_3({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const mono = Fira_Code({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -39,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${heading.variable} ${body.variable} font-body antialiased text-stone-800`}
+        className={`${heading.variable} ${body.variable} ${mono.variable} font-body antialiased text-stone-800`}
       >
         <AuthProvider>
           <ProgressProvider>

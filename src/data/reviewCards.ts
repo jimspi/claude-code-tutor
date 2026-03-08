@@ -25,6 +25,19 @@ export const reviewCards: ReviewCard[] = [
     lessonId: "1-5",
   },
 
+  {
+    question: "Where do you get your Claude Code API key?",
+    answer:
+      "Go to console.anthropic.com, create an account, click API Keys, and generate one.",
+    lessonId: "1-2",
+  },
+  {
+    question: "What is a GitHub Personal Access Token for?",
+    answer:
+      "It's how GitHub verifies your identity when you push code from your terminal — like a password for Git operations.",
+    lessonId: "1-6",
+  },
+
   // Level 2
   {
     question: "What are the three parts of a good prompt?",
@@ -59,6 +72,13 @@ export const reviewCards: ReviewCard[] = [
     lessonId: "3-5",
   },
 
+  {
+    question: "What does deploying to Vercel do?",
+    answer:
+      "It puts your project on the internet with a public URL so anyone can see it — and it auto-updates when you push to GitHub.",
+    lessonId: "3-6",
+  },
+
   // Level 4
   {
     question: "What is CLAUDE.md?",
@@ -81,9 +101,9 @@ export const reviewCards: ReviewCard[] = [
 
   // Level 5
   {
-    question: "Why should you commit to git often?",
+    question: "What is a pull request?",
     answer:
-      "Because each commit is a save point — if anything breaks, you can always roll back.",
+      "A formal way to propose changes — you work on a branch, then open a PR for review before merging into main.",
     lessonId: "5-2",
   },
   {

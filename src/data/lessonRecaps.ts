@@ -14,9 +14,9 @@ export const lessonRecaps: Record<string, LessonRecap> = {
   },
   "1-2": {
     takeaways: [
-      "Node.js is the only prerequisite",
       "Install with one command: npm install -g @anthropic-ai/claude-code",
-      "Test it works by typing claude --version",
+      "Get your API key from console.anthropic.com to authenticate",
+      "You can also use a Claude Pro/Max subscription instead of an API key",
     ],
     encouragement: "Setup done. The boring part is over.",
   },
@@ -43,6 +43,14 @@ export const lessonRecaps: Record<string, LessonRecap> = {
       "Sessions persist — Claude remembers what you discussed",
     ],
     encouragement: "You now understand what's happening under the hood.",
+  },
+  "1-6": {
+    takeaways: [
+      "GitHub is cloud storage for your code — like Google Drive but with version tracking",
+      "Configure Git with your name and email, then authenticate with a Personal Access Token",
+      "You can ask Claude Code to handle the entire GitHub setup for you",
+    ],
+    encouragement: "Your projects now have a home on the internet.",
   },
   "2-1": {
     takeaways: [
@@ -116,6 +124,14 @@ export const lessonRecaps: Record<string, LessonRecap> = {
     ],
     encouragement: "You'll never be stuck for long again.",
   },
+  "3-6": {
+    takeaways: [
+      "Vercel turns your GitHub repo into a live website with one click",
+      "Every push to GitHub automatically updates your deployed site",
+      "You get a free URL like yourproject.vercel.app — no server setup needed",
+    ],
+    encouragement: "Your project is live on the internet. That's a real milestone.",
+  },
   "4-1": {
     takeaways: [
       "CLAUDE.md gives Claude permanent project context",
@@ -166,11 +182,11 @@ export const lessonRecaps: Record<string, LessonRecap> = {
   },
   "5-2": {
     takeaways: [
-      "Git tracks every change — commit often",
-      "Branches let you experiment without risk",
-      "Push to GitHub to share and back up your work",
+      "Pull requests are the professional way to propose and review changes",
+      "Feature branches keep your main branch clean and stable",
+      "Claude Code can resolve merge conflicts and review your code before committing",
     ],
-    encouragement: "You're now part of how real teams build software.",
+    encouragement: "You're using the same workflow as professional dev teams.",
   },
   "5-3": {
     takeaways: [

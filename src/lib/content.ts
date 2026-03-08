@@ -287,8 +287,63 @@ export const lessonContent: Record<string, LessonContent> = {
         content: "npm can sometimes be slow. Wait at least 2-3 minutes before assuming something is wrong. If it truly seems stuck, press Ctrl+C to cancel, then try running the install command again. A stable internet connection is required.",
       },
       {
+        type: "divider",
+      },
+      {
+        type: "subheading",
+        text: "Step 5: Authenticate Claude Code",
+      },
+      {
+        type: "paragraph",
+        text: "Claude Code is installed, but it needs permission to talk to Claude's brain (the AI model). This is done through an API key — think of it as a password that connects your terminal to Claude's servers.",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Get your API key",
+        text: "Go to console.anthropic.com in your browser. Create a free account if you don't have one. Once logged in, click \"API Keys\" in the sidebar, then \"Create Key\". Give it a name like \"claude-code\" and click \"Create\". Copy the key — it starts with \"sk-ant-\" and is a long string of characters.",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Start Claude Code for the first time",
+        text: "Open your terminal and type claude. On the first run, Claude Code will ask you to authenticate. Select \"Enter API Key\" and paste the key you just copied.",
+      },
+      {
+        type: "code",
+        code: "claude",
+        language: "bash",
+        label: "Start Claude Code (first run)",
+      },
+      {
+        type: "paragraph",
+        text: "Claude Code will verify your key and connect to the AI. You should see a welcome message and a prompt ready for your first request. That's it — you're authenticated.",
+      },
+      {
+        type: "concept",
+        title: "What about billing?",
+        text: "Using the API key means you pay for what you use (a few cents per conversation). Anthropic gives new accounts some free credits to get started. You can set spending limits in your console.anthropic.com dashboard so you never get a surprise bill. For learning and small projects, the cost is typically a few dollars per month.",
+      },
+      {
+        type: "accordion",
+        title: "Can I use Claude Code with a Max subscription instead?",
+        content: "Yes. If you have a Claude Pro or Max subscription, you can choose that option when Claude Code asks you to authenticate on first run. Select the subscription login option instead of entering an API key. This lets you use Claude Code as part of your existing subscription.",
+      },
+      {
+        type: "accordion",
+        title: "I want to set my API key as an environment variable",
+        content: "Advanced users can set the ANTHROPIC_API_KEY environment variable instead. On Mac/Linux, add this to your ~/.bashrc or ~/.zshrc: export ANTHROPIC_API_KEY=\"sk-ant-your-key-here\". On Windows, search for \"Environment Variables\" in Settings and add it there. Claude Code will automatically detect it.",
+      },
+      {
         type: "tip",
-        text: "Once Claude Code is installed, you only need to do this setup once. From now on, you just open your terminal, type \"claude\", and you're in.",
+        text: "Keep your API key private. Don't share it, don't paste it into websites, and don't commit it to code. It's like a password — anyone with it can use your account. If you think your key was exposed, go to console.anthropic.com and revoke it immediately.",
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "tip",
+        text: "Once Claude Code is installed and authenticated, you only need to do this setup once. From now on, you just open your terminal, type \"claude\", and you're in.",
       },
     ],
   },
@@ -698,6 +753,448 @@ export const lessonContent: Record<string, LessonContent> = {
         type: "concept",
         title: "Key mental model",
         text: "Claude Code is an incredibly capable assistant that works in the present moment. It reads your project, understands the current state of things, and makes smart decisions based on what it sees right now. Your job is to guide it by describing what you want, reviewing what it proposes, and approving the changes you like.",
+      },
+    ],
+  },
+  "1-6": {
+    lessonId: "1-6",
+    blocks: [
+      {
+        type: "heading",
+        text: "Setting Up GitHub",
+      },
+      {
+        type: "paragraph",
+        text: "You've been building things with Claude Code on your own computer. That's great! But right now, your code only exists in one place: your machine. If your computer breaks, gets lost, or you just want to work from a different device, that code is gone. That's where GitHub comes in.",
+      },
+      {
+        type: "subheading",
+        text: "What Is GitHub?",
+      },
+      {
+        type: "concept",
+        title: "Think of it like Google Drive, but for code",
+        text: "GitHub is a website that stores your code online. Just like you might save documents to Google Drive so they're safe and accessible from anywhere, GitHub does the same thing for code. But it goes a step further: it tracks every change you've ever made. If you break something, you can go back to a previous version. If you're working with someone else, GitHub keeps track of who changed what. For now, just think of it as a safe, online home for your projects.",
+      },
+      {
+        type: "paragraph",
+        text: "GitHub is used by virtually every professional developer in the world. By setting it up now, you're giving your projects a real home and learning a workflow that will serve you for as long as you build software.",
+      },
+      {
+        type: "subheading",
+        text: "Creating a GitHub Account",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Go to github.com",
+        text: "Open your browser and navigate to github.com. You'll see a sign-up page.",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Click \"Sign up\"",
+        text: "Click the sign-up button and follow the prompts. You'll need to provide an email address, create a password, and choose a username. Pick a username you're comfortable with because it becomes part of your public profile.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Verify your account",
+        text: "GitHub will send you a verification email. Click the link in that email to confirm your account. That's it. You now have a GitHub account.",
+      },
+      {
+        type: "tip",
+        text: "GitHub is completely free for personal use. You don't need a paid plan to follow this course or to host your projects. The free tier is more than enough for most people.",
+      },
+      {
+        type: "subheading",
+        text: "Making Sure Git Is Installed",
+      },
+      {
+        type: "paragraph",
+        text: "GitHub is the website. Git is the tool on your computer that talks to GitHub. Think of Git as the delivery truck and GitHub as the warehouse. You need both. The good news is that Git comes pre-installed on most Mac and Linux systems. On Windows, it often comes with development tools you may have already installed. Let's check.",
+      },
+      {
+        type: "paragraph",
+        text: "Open your terminal and type:",
+      },
+      {
+        type: "code",
+        code: "git --version",
+        language: "bash",
+        label: "Check if Git is installed",
+      },
+      {
+        type: "interactive-terminal",
+        title: "Terminal",
+        commands: [
+          {
+            command: "git --version",
+            output: ["git version 2.43.0"],
+            delay: 60,
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "If you see a version number like \"git version 2.43.0\", you're good to go. The exact number doesn't matter as long as something shows up.",
+      },
+      {
+        type: "accordion",
+        title: "I got an error or 'command not found'",
+        content: "If Git isn't installed, head to git-scm.com and download it for your operating system. On Mac, you can also install it by running \"xcode-select --install\" in your terminal. On Windows, download the installer from git-scm.com and run it, accepting the default settings. After installing, close your terminal and open a new one, then try \"git --version\" again.",
+      },
+      {
+        type: "subheading",
+        text: "Configuring Git With Your Identity",
+      },
+      {
+        type: "paragraph",
+        text: "Before you use Git, you need to tell it who you are. This is so that when you save changes, Git can label them with your name. Think of it like writing your name on your homework. You only have to do this once.",
+      },
+      {
+        type: "paragraph",
+        text: "Run these two commands in your terminal, replacing the placeholder text with your actual name and email:",
+      },
+      {
+        type: "code",
+        code: "git config --global user.name \"Your Name\"",
+        language: "bash",
+        label: "Set your name",
+      },
+      {
+        type: "code",
+        code: "git config --global user.email \"your.email@example.com\"",
+        language: "bash",
+        label: "Set your email",
+      },
+      {
+        type: "tip",
+        text: "Use the same email address you used to sign up for GitHub. This helps GitHub connect your work to your account.",
+      },
+      {
+        type: "paragraph",
+        text: "You can verify your settings by running:",
+      },
+      {
+        type: "code",
+        code: "git config --global --list",
+        language: "bash",
+        label: "Verify your Git configuration",
+      },
+      {
+        type: "interactive-terminal",
+        title: "Terminal",
+        commands: [
+          {
+            command: "git config --global user.name \"Jane Smith\"",
+            output: [],
+            delay: 60,
+          },
+          {
+            command: "git config --global user.email \"jane@example.com\"",
+            output: [],
+            delay: 60,
+          },
+          {
+            command: "git config --global --list",
+            output: ["user.name=Jane Smith", "user.email=jane@example.com"],
+            delay: 60,
+          },
+        ],
+      },
+      {
+        type: "subheading",
+        text: "Authenticating With GitHub",
+      },
+      {
+        type: "paragraph",
+        text: "When you try to send code from your computer to GitHub, GitHub needs to verify that it's actually you. You wouldn't want a stranger uploading code to your account! There are a few ways to authenticate, but the simplest method for beginners is a Personal Access Token. Think of it like a special password that you create specifically for your computer to talk to GitHub.",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Go to your GitHub token settings",
+        text: "Log into GitHub, click your profile picture in the top-right corner, and go to Settings. Scroll down the left sidebar and click \"Developer settings\" at the very bottom. Then click \"Personal access tokens\" and choose \"Tokens (classic)\".",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Generate a new token",
+        text: "Click \"Generate new token\" and choose \"Generate new token (classic)\". Give it a name like \"My Laptop\" so you remember what it's for. For the expiration, you can choose 90 days or \"No expiration\" if you don't want to redo this later.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Select permissions",
+        text: "Under \"Select scopes\", check the box next to \"repo\". This gives the token permission to create and manage your repositories. You don't need to check anything else for now.",
+      },
+      {
+        type: "step",
+        number: 4,
+        title: "Copy your token",
+        text: "Click \"Generate token\" at the bottom. You'll see a long string of characters. Copy it immediately and save it somewhere safe, like a password manager or a note on your computer. GitHub will only show you this token once. If you lose it, you'll need to create a new one.",
+      },
+      {
+        type: "step",
+        number: 5,
+        title: "Use the token when prompted",
+        text: "The next time you push code to GitHub and it asks for your password, paste this token instead of your GitHub password. On most systems, your computer will remember it after the first time so you won't have to paste it again.",
+      },
+      {
+        type: "accordion",
+        title: "What about SSH keys? I've seen people mention those.",
+        content: "SSH keys are another way to authenticate with GitHub. They're more secure and you never have to enter a password once they're set up. But they involve generating key pairs and adding them to your GitHub account, which is a bit more complex. The Personal Access Token method works perfectly well and is easier to understand as a beginner. You can always switch to SSH keys later when you're more comfortable. Claude Code can even set up SSH keys for you if you ask it to.",
+      },
+      {
+        type: "subheading",
+        text: "Creating Your First Repository",
+      },
+      {
+        type: "paragraph",
+        text: "A repository (often called a \"repo\") is just a project folder that GitHub tracks. It contains your code, your files, and the full history of every change you've made. Let's create one.",
+      },
+      {
+        type: "paragraph",
+        text: "You have two options: create the repository on GitHub's website, or let Claude Code do it for you. Let's walk through both.",
+      },
+      {
+        type: "subheading",
+        text: "Option A: Create a Repo on GitHub.com",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Click the \"+\" button",
+        text: "On GitHub, click the \"+\" icon in the top-right corner and choose \"New repository\".",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Fill in the details",
+        text: "Give your repository a name (for example, \"my-first-project\"). Add an optional description. Choose \"Public\" if you want anyone to see it, or \"Private\" if you want it just for you. Leave the other options at their defaults.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Click \"Create repository\"",
+        text: "GitHub will create the repo and show you a page with instructions for connecting it to your local project. We'll use those instructions in the next section.",
+      },
+      {
+        type: "subheading",
+        text: "Option B: Let Claude Code Create It",
+      },
+      {
+        type: "paragraph",
+        text: "If you have the GitHub CLI installed (or Claude Code can install it for you), you can skip the website entirely and just tell Claude:",
+      },
+      {
+        type: "code",
+        code: "Create a new GitHub repository called my-first-project and make it private",
+        language: "text",
+        label: "Ask Claude to create a repo",
+      },
+      {
+        type: "paragraph",
+        text: "Claude Code will handle creating the repository on GitHub for you. It may ask you to authenticate with the GitHub CLI the first time, but it will walk you through that process.",
+      },
+      {
+        type: "subheading",
+        text: "Connecting Your Project and Pushing Code",
+      },
+      {
+        type: "paragraph",
+        text: "Now that you have a GitHub repository, you need to connect your local project to it and \"push\" (upload) your code. Here are the commands that make this happen:",
+      },
+      {
+        type: "code",
+        code: "cd my-first-project\ngit init\ngit add .\ngit commit -m \"Initial commit\"\ngit remote add origin https://github.com/yourusername/my-first-project.git\ngit push -u origin main",
+        language: "bash",
+        label: "Connect and push to GitHub",
+      },
+      {
+        type: "paragraph",
+        text: "That looks like a lot of commands. Let's break down what each one does:",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "cd my-first-project",
+        text: "Navigate into your project folder.",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "git init",
+        text: "Initialize Git in this folder. This tells Git to start tracking changes here.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "git add .",
+        text: "Stage all your files. This is like putting everything in a box, ready to be shipped.",
+      },
+      {
+        type: "step",
+        number: 4,
+        title: "git commit -m \"Initial commit\"",
+        text: "Seal the box and label it. The message in quotes describes what you're saving. \"Initial commit\" is a common label for the first time you save a project.",
+      },
+      {
+        type: "step",
+        number: 5,
+        title: "git remote add origin https://...",
+        text: "Tell Git where your GitHub repository lives. Replace the URL with the one GitHub gave you when you created the repo.",
+      },
+      {
+        type: "step",
+        number: 6,
+        title: "git push -u origin main",
+        text: "Send your code to GitHub. This is the moment your project goes from existing only on your machine to being safely stored online.",
+      },
+      {
+        type: "interactive-terminal",
+        title: "Terminal",
+        commands: [
+          {
+            command: "cd my-first-project",
+            output: [],
+            delay: 60,
+          },
+          {
+            command: "git init",
+            output: ["Initialized empty Git repository in /home/user/my-first-project/.git/"],
+            delay: 80,
+          },
+          {
+            command: "git add .",
+            output: [],
+            delay: 60,
+          },
+          {
+            command: "git commit -m \"Initial commit\"",
+            output: [
+              "[main (root-commit) a1b2c3d] Initial commit",
+              " 3 files changed, 47 insertions(+)",
+              " create mode 100644 index.html",
+              " create mode 100644 style.css",
+              " create mode 100644 app.js",
+            ],
+            delay: 100,
+          },
+          {
+            command: "git remote add origin https://github.com/janesmith/my-first-project.git",
+            output: [],
+            delay: 60,
+          },
+          {
+            command: "git push -u origin main",
+            output: [
+              "Enumerating objects: 5, done.",
+              "Counting objects: 100% (5/5), done.",
+              "Writing objects: 100% (5/5), 1.24 KiB | 1.24 MiB/s, done.",
+              "Total 5 (delta 0), reused 0 (delta 0)",
+              "To https://github.com/janesmith/my-first-project.git",
+              " * [new branch]      main -> main",
+              "Branch 'main' set up to track remote branch 'main' from 'origin'.",
+            ],
+            delay: 150,
+          },
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "If this is your first time pushing to GitHub, it will ask for your username and password. Use your GitHub username and paste the Personal Access Token you created earlier as the password.",
+      },
+      {
+        type: "subheading",
+        text: "The Easy Way: Just Tell Claude Code to Do It",
+      },
+      {
+        type: "paragraph",
+        text: "Here's the secret: you don't need to memorize any of those commands. Claude Code can handle the entire process for you. All you have to do is ask.",
+      },
+      {
+        type: "code",
+        code: "Set up git for this project and push it to a new GitHub repository",
+        language: "text",
+        label: "Let Claude handle everything",
+      },
+      {
+        type: "paragraph",
+        text: "Claude Code will initialize Git, create the repository on GitHub, connect everything, and push your code. It will ask for your permission at each step, just like it always does. Here's what that conversation might look like:",
+      },
+      {
+        type: "claude-conversation",
+        title: "Claude Code",
+        steps: [
+          {
+            role: "user",
+            message: "Set up git for this project and push it to a new GitHub repository called my-first-project",
+            suggested: true,
+          },
+          {
+            role: "claude",
+            message: "I'll set up Git for this project and push it to GitHub. Let me walk through the steps.",
+            typing: true,
+          },
+          {
+            role: "permission",
+            action: "Run: git init",
+            detail: "Initialize a new Git repository in this folder",
+          },
+          {
+            role: "permission",
+            action: "Run: git add .",
+            detail: "Stage all files for the first commit",
+          },
+          {
+            role: "permission",
+            action: "Run: git commit -m \"Initial commit\"",
+            detail: "Create the initial commit with all project files",
+          },
+          {
+            role: "permission",
+            action: "Run: gh repo create my-first-project --private --source=. --push",
+            detail: "Create a private GitHub repo and push the code",
+          },
+          {
+            role: "claude",
+            message: "All done! Your project is now on GitHub. You can view it at https://github.com/yourusername/my-first-project. It's set to private, so only you can see it. Every time you want to save your latest changes to GitHub in the future, just ask me to \"push my changes\" and I'll handle it.",
+            typing: true,
+          },
+        ],
+      },
+      {
+        type: "tip",
+        text: "This is one of the best things about Claude Code: you can learn the concepts without memorizing the commands. As you use Git more, you'll naturally start to remember the common commands. But there's no rush. Let Claude handle the heavy lifting while you focus on building.",
+      },
+      {
+        type: "concept",
+        title: "Why bother with GitHub at all?",
+        text: "Three big reasons. First, backup: your code is safe online even if something happens to your computer. Second, sharing: you can show your projects to others or collaborate with teammates. Third, deploying: many hosting services (like Vercel, Netlify, and GitHub Pages) can take code directly from GitHub and turn it into a live website. You'll learn about deploying later in this course.",
+      },
+      {
+        type: "accordion",
+        title: "What if I make a mistake and push something I didn't mean to?",
+        content: "Don't panic! Git keeps a complete history of every change. You can always undo a push or revert to a previous version. And the easiest way to do that? Just tell Claude Code: \"Undo my last commit\" or \"Revert the last push.\" It will handle the Git commands for you.",
+      },
+      {
+        type: "accordion",
+        title: "Do I need to push every time I make a change?",
+        content: "No. You can make as many changes as you want locally and push whenever you're ready. A good habit is to push at the end of each work session or after completing a meaningful chunk of work. Think of it like saving a document: you don't save after every keystroke, but you save regularly so you don't lose progress.",
+      },
+      {
+        type: "quiz",
+        question: "You've built a project with Claude Code and want to save it to GitHub. What's the easiest way to do this?",
+        options: [
+          "Manually type all the Git commands from memory",
+          "Email your files to GitHub support",
+          "Tell Claude Code: \"Set up git and push this project to GitHub\"",
+          "Copy and paste each file into GitHub's website",
+        ],
+        correctIndex: 2,
+        explanation: "While you can absolutely run the Git commands yourself, the easiest approach is to let Claude Code handle it. Just tell it to set up Git and push to GitHub, and it will run all the necessary commands for you, asking your permission at each step.",
       },
     ],
   },
@@ -1694,6 +2191,331 @@ export const lessonContent: Record<string, LessonContent> = {
       },
     ],
   },
+  "3-6": {
+    lessonId: "3-6",
+    blocks: [
+      {
+        type: "heading",
+        text: "Deploying Your Site to Vercel",
+      },
+      {
+        type: "paragraph",
+        text: "You've built something. It works on your computer. But right now, only you can see it. What if you could share a link with anyone in the world and they could see your project instantly? That's what deployment is all about, and it's one of the most exciting moments in any project.",
+      },
+      {
+        type: "subheading",
+        text: "What Does \"Deploying\" Mean?",
+      },
+      {
+        type: "paragraph",
+        text: "Right now, your project lives on your computer. When you open it in your browser, you're looking at files stored on your own machine. Nobody else can see them. Deployment means putting your project on a server — a computer that's always connected to the internet — so that anyone with the link can visit it, from anywhere in the world.",
+      },
+      {
+        type: "concept",
+        title: "Think of it like this",
+        text: "Building your project is like cooking a great meal in your kitchen. Deploying it is like opening a restaurant. The food is the same, but now everyone can come try it. Deployment takes your project from \"works on my computer\" to \"live on the internet.\"",
+      },
+      {
+        type: "subheading",
+        text: "What Is Vercel?",
+      },
+      {
+        type: "paragraph",
+        text: "Vercel is a free hosting platform that makes deployment incredibly easy. It's designed to work perfectly with modern web projects — especially those built with frameworks like Next.js, React, and plain HTML/CSS sites. The best part? For personal projects and small sites, it's completely free.",
+      },
+      {
+        type: "comparison",
+        left: {
+          title: "Old-School Deployment",
+          text: "Buy a server. Set up the operating system. Install software. Configure security. Upload your files manually. Fix permissions. Set up SSL certificates. Maintain everything yourself. Hope nothing breaks at 3 AM.",
+        },
+        right: {
+          title: "With Vercel",
+          text: "Connect your GitHub repo. Click deploy. Done. Vercel handles servers, security, SSL certificates, and everything else automatically. Your site is live in under a minute.",
+        },
+      },
+      {
+        type: "subheading",
+        text: "Before You Start",
+      },
+      {
+        type: "paragraph",
+        text: "You'll need two things before deploying to Vercel:",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "A GitHub account",
+        text: "If you followed along in the earlier lessons, you already have one. If not, head to github.com and create a free account. You'll use this to sign into Vercel.",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Your project pushed to GitHub",
+        text: "Your project needs to be in a GitHub repository. If it's not there yet, you can ask Claude Code to help: \"Initialize a git repo, create a GitHub repository, and push this project to it.\" Claude will handle the whole process.",
+      },
+      {
+        type: "tip",
+        text: "If you haven't pushed your project to GitHub yet, do that first. Open Claude Code in your project folder and say: \"Help me push this project to a new GitHub repository.\" Claude will walk you through each step.",
+      },
+      {
+        type: "subheading",
+        text: "Creating a Vercel Account",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Go to vercel.com",
+        text: "Open your browser and navigate to vercel.com. You'll see a big sign-up button on the homepage.",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Sign up with GitHub",
+        text: "Click \"Sign Up\" and choose \"Continue with GitHub.\" This is the easiest method because it automatically connects your GitHub account, which makes deploying projects seamless. You'll be asked to authorize Vercel to access your GitHub account — this is normal and safe.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Choose the free Hobby plan",
+        text: "Vercel will ask you to pick a plan. Select \"Hobby\" — it's completely free and gives you everything you need for personal projects. You can always upgrade later if you need to.",
+      },
+      {
+        type: "subheading",
+        text: "Method 1: Deploy From GitHub (Recommended)",
+      },
+      {
+        type: "paragraph",
+        text: "This is the easiest way to deploy and the method most people use. Once it's set up, your site will automatically update every time you push changes to GitHub.",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Click \"Add New Project\" in your Vercel dashboard",
+        text: "After signing in, you'll land on your Vercel dashboard. Click the \"Add New...\" button and select \"Project.\"",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Import your GitHub repository",
+        text: "Vercel will show a list of your GitHub repositories. Find the project you want to deploy and click \"Import.\" If you don't see it, click \"Adjust GitHub App Permissions\" to give Vercel access to the right repositories.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Configure your project",
+        text: "Vercel is smart — it automatically detects what framework your project uses (Next.js, React, plain HTML, etc.) and sets up the right build settings. In most cases, you don't need to change anything here. Just review the settings and move on.",
+      },
+      {
+        type: "step",
+        number: 4,
+        title: "Click \"Deploy\"",
+        text: "Hit that deploy button and watch the magic happen. Vercel will build your project and put it on the internet. This usually takes less than a minute. When it's done, you'll see a celebration screen with a link to your live site.",
+      },
+      {
+        type: "paragraph",
+        text: "That's it. Your project is live on the internet. Take a moment to appreciate that — you built something and now the whole world can see it.",
+      },
+      {
+        type: "subheading",
+        text: "Method 2: Deploy From the Terminal With Vercel CLI",
+      },
+      {
+        type: "paragraph",
+        text: "If you prefer working from the terminal (or if you want to deploy a project that isn't on GitHub yet), you can use the Vercel command-line tool.",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Install the Vercel CLI",
+        text: "Run this command in your terminal to install the Vercel command-line tool globally on your computer:",
+      },
+      {
+        type: "code",
+        code: "npm i -g vercel",
+        language: "bash",
+        label: "Install the Vercel CLI",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Navigate to your project folder",
+        text: "Make sure your terminal is in the root folder of the project you want to deploy.",
+      },
+      {
+        type: "code",
+        code: "cd ~/my-project",
+        language: "bash",
+        label: "Navigate to your project",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Run the vercel command",
+        text: "Just type vercel and press Enter. The first time you run it, it will ask you to log in. After that, it will ask a few simple questions about your project.",
+      },
+      {
+        type: "code",
+        code: "vercel",
+        language: "bash",
+        label: "Deploy with one command",
+      },
+      {
+        type: "interactive-terminal",
+        title: "Vercel CLI Deployment",
+        commands: [
+          {
+            command: "vercel",
+            output: [
+              "Vercel CLI 39.0.0",
+              "? Set up and deploy \"~/my-project\"? [Y/n] y",
+              "? Which scope do you want to deploy to? My Projects",
+              "? Link to existing project? [y/N] n",
+              "? What's your project's name? my-project",
+              "? In which directory is your code located? ./",
+              "Auto-detected Project Settings (Next.js):",
+              "- Build Command: next build",
+              "- Output Directory: .next",
+              "- Install Command: npm install",
+              "? Want to modify these settings? [y/N] n",
+              "Deploying...",
+              "Ready! Deployed to https://my-project-abc123.vercel.app",
+            ],
+            delay: 150,
+          },
+        ],
+      },
+      {
+        type: "tip",
+        text: "For a production deployment (your \"real\" live site), run \"vercel --prod\" instead of just \"vercel\". Without the --prod flag, Vercel creates a preview deployment, which is great for testing but uses a temporary URL.",
+      },
+      {
+        type: "subheading",
+        text: "Let Claude Code Help You Deploy",
+      },
+      {
+        type: "paragraph",
+        text: "Here's the best part: you don't have to remember any of this. You can just ask Claude Code to handle the deployment for you. Claude knows how Vercel works and can guide you through the entire process.",
+      },
+      {
+        type: "code",
+        code: "Deploy this project to Vercel",
+        language: "text",
+        label: "Ask Claude to deploy for you",
+      },
+      {
+        type: "code",
+        code: "Set up Vercel for this project and deploy it",
+        language: "text",
+        label: "Or be more specific",
+      },
+      {
+        type: "code",
+        code: "I want to deploy this to Vercel. I already have a Vercel account\nbut I haven't installed the CLI yet. Walk me through the whole process.",
+        language: "text",
+        label: "Ask for step-by-step help",
+      },
+      {
+        type: "paragraph",
+        text: "Claude will install the Vercel CLI if needed, run the deployment command, and help you answer any prompts that come up. If something goes wrong during deployment, Claude can read the error messages and fix the issue.",
+      },
+      {
+        type: "subheading",
+        text: "What Happens After Deployment",
+      },
+      {
+        type: "paragraph",
+        text: "Once your project is deployed, a few great things happen:",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "You get a live URL",
+        text: "Vercel gives you a URL like yourproject.vercel.app. This is your site's address on the internet. You can share this link with anyone — friends, family, potential employers, clients — and they can see your project instantly.",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Automatic re-deploys",
+        text: "If you deployed from GitHub, every time you push new changes to your repository, Vercel automatically rebuilds and redeploys your site. Change a typo, push to GitHub, and your live site updates within a minute. No manual re-deployment needed.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Free SSL (the padlock icon)",
+        text: "Vercel automatically gives your site HTTPS, which is the secure version of the web. You'll see the little padlock icon in the browser's address bar. This means your visitors' data is encrypted, and search engines prefer secure sites.",
+      },
+      {
+        type: "concept",
+        title: "The feedback loop",
+        text: "This is the workflow you'll settle into: make changes locally with Claude Code, push to GitHub, and Vercel deploys automatically. It's a smooth loop that lets you go from idea to live change in minutes. Build, push, live. Build, push, live. It becomes second nature very quickly.",
+      },
+      {
+        type: "subheading",
+        text: "Custom Domains",
+      },
+      {
+        type: "paragraph",
+        text: "The yourproject.vercel.app URL is perfectly fine, but if you want a professional touch, you can connect your own domain name (like www.yourname.com). Vercel makes this easy — you go to your project settings, click \"Domains,\" and add your custom domain. Vercel will give you instructions for updating your domain's settings.",
+      },
+      {
+        type: "accordion",
+        title: "How do I buy a custom domain?",
+        content: "You can buy domain names from registrars like Namecheap, Google Domains, or Cloudflare Registrar. Prices typically range from $10 to $15 per year for common extensions like .com. Once you own the domain, you point it to Vercel by updating the DNS settings — Vercel's dashboard walks you through exactly what to change. You can also ask Claude Code: \"Help me connect my custom domain to my Vercel project\" and it will guide you through the process.",
+      },
+      {
+        type: "subheading",
+        text: "Troubleshooting Common Issues",
+      },
+      {
+        type: "paragraph",
+        text: "Deployment usually goes smoothly, but sometimes things don't work on the first try. Here are the most common issues and how to fix them:",
+      },
+      {
+        type: "accordion",
+        title: "Build errors — \"Build Failed\"",
+        content: "This means Vercel tried to build your project but something went wrong. The most common cause is that your project works locally but has a dependency or configuration issue. Go to your Vercel dashboard, click on the failed deployment, and look at the build logs. Copy the error message and paste it to Claude Code: \"My Vercel deployment failed with this error: [paste error]. Can you fix it?\" Claude will diagnose the issue and update your code.",
+      },
+      {
+        type: "accordion",
+        title: "Environment variables not working",
+        content: "If your project uses environment variables (like API keys stored in a .env file), those variables don't automatically transfer to Vercel. You need to add them manually: go to your Vercel project settings, click \"Environment Variables,\" and add each variable name and value. You can also ask Claude: \"What environment variables does this project need for Vercel deployment?\" and Claude will list them for you.",
+      },
+      {
+        type: "accordion",
+        title: "Page shows \"404 Not Found\" after deploying",
+        content: "This usually means Vercel's routing doesn't match your project structure. For single-page apps, you might need a vercel.json configuration file. Ask Claude: \"My Vercel deployment shows a 404 error. Can you add the right vercel.json configuration to fix the routing?\" Claude will create the configuration file your project needs.",
+      },
+      {
+        type: "accordion",
+        title: "Site looks different from local version",
+        content: "If your deployed site looks different from what you see locally, it's usually because of missing assets (images, fonts) or environment-specific issues. Make sure all your files are committed to Git and pushed to GitHub. Ask Claude: \"My deployed site on Vercel looks different from my local version. Can you investigate why?\"",
+      },
+      {
+        type: "tip",
+        text: "The number one rule for deployment issues: copy the error message and give it to Claude Code. Claude is excellent at reading build logs and deployment errors. Nine times out of ten, it can identify the problem and fix it in a single conversation.",
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "paragraph",
+        text: "Deploying your first project to the internet is a milestone worth celebrating. You took an idea, turned it into a real project with Claude Code, and now it has a home on the web where anyone can see it. That's the full journey — from idea to live on the internet.",
+      },
+      {
+        type: "quiz",
+        question: "After deploying from GitHub, what happens when you push new changes to your repository?",
+        options: [
+          "Nothing — you have to manually re-deploy every time",
+          "Vercel automatically rebuilds and redeploys your site",
+          "You need to run the vercel command again",
+          "Your site goes offline until you approve the changes",
+        ],
+        correctIndex: 1,
+        explanation: "One of the best features of deploying from GitHub is automatic re-deploys. Every time you push changes to your repository, Vercel detects them, rebuilds your project, and updates your live site — all without you lifting a finger.",
+      },
+    ],
+  },
   "4-1": {
     lessonId: "4-1",
     blocks: [
@@ -2162,90 +2984,199 @@ export const lessonContent: Record<string, LessonContent> = {
     blocks: [
       {
         type: "heading",
-        text: "Working With GitHub",
+        text: "Advanced GitHub Workflows",
       },
       {
         type: "paragraph",
-        text: "GitHub is where developers store, share, and collaborate on code. Think of it as Google Drive for code projects, but with powerful version tracking built in. Claude Code works seamlessly with GitHub, and this lesson will teach you the basics.",
+        text: "You already know how to set up GitHub, push your code, and save your progress. Now it's time to learn the workflows that professional development teams use every day. These patterns keep your code organized, your main branch stable, and your collaboration smooth.",
       },
       {
         type: "concept",
-        title: "Git vs. GitHub",
-        text: "Git is the tool that tracks changes to your code (the save points we learned about earlier). GitHub is a website that stores your Git projects online. Think of Git as the save system and GitHub as the cloud storage. You use Git locally on your computer, and GitHub to share your work and keep a backup.",
+        title: "Quick recap",
+        text: "In Level 1, you set up GitHub, learned to push code, and created your first repository. This lesson builds on that foundation with the patterns that make GitHub truly powerful: branches, pull requests, code review, and conflict resolution.",
       },
       {
         type: "subheading",
-        text: "The Basic GitHub Workflow",
+        text: "Branches: Your Safety Net for Experimentation",
+      },
+      {
+        type: "paragraph",
+        text: "A branch is like making a copy of your project to experiment on. The original (called \"main\") stays untouched while you build your new feature on a separate branch. If the experiment works, you merge it back. If it doesn't, you delete the branch. The original is never at risk.",
+      },
+      {
+        type: "code",
+        code: "Create a new branch called feature/dark-mode and switch to it",
+        language: "text",
+        label: "Ask Claude to create a branch",
+      },
+      {
+        type: "paragraph",
+        text: "Use a naming convention so branches are easy to understand at a glance:",
       },
       {
         type: "step",
         number: 1,
-        title: "Initialize your project with Git",
-        text: "If you haven't already:",
-      },
-      {
-        type: "code",
-        code: "Initialize a git repository for this project",
-        language: "text",
-        label: "Ask Claude to set up Git",
+        title: "feature/... for new features",
+        text: "feature/dark-mode, feature/search-bar, feature/user-profiles",
       },
       {
         type: "step",
         number: 2,
-        title: "Create a branch for new features",
-        text: "Branches let you work on new features without risking the main version of your project:",
-      },
-      {
-        type: "code",
-        code: "Create a new branch called feature/dark-mode and\nswitch to it",
-        language: "text",
-        label: "Creating a feature branch",
-      },
-      {
-        type: "paragraph",
-        text: "A branch is like creating a copy of your project to experiment on. If the experiment works, you merge it back. If it doesn't, you throw the copy away. The original is never at risk.",
+        title: "fix/... for bug fixes",
+        text: "fix/login-crash, fix/broken-link, fix/mobile-layout",
       },
       {
         type: "step",
         number: 3,
-        title: "Commit your changes",
-        text: "Save your progress with a meaningful message:",
+        title: "chore/... for maintenance tasks",
+        text: "chore/update-dependencies, chore/cleanup-css, chore/add-readme",
+      },
+      {
+        type: "subheading",
+        text: "Pull Requests: The Professional Way to Merge Code",
+      },
+      {
+        type: "paragraph",
+        text: "When your feature branch is ready, you don't just merge it directly. Instead, you create a pull request (PR). A PR is a formal proposal that says \"here's what I changed, please review it before it goes into main.\" Even if you're working alone, PRs are a great habit because they give you a chance to review your own work.",
       },
       {
         type: "code",
-        code: "Commit all the current changes with a descriptive\ncommit message that explains what was added",
+        code: "Create a pull request for this branch with a description of what I changed",
         language: "text",
-        label: "Committing changes",
+        label: "Ask Claude to create a PR",
+      },
+      {
+        type: "paragraph",
+        text: "Claude Code will create the PR on GitHub with a title and description summarizing your changes. You can then view it on GitHub, review the changes one more time, and click \"Merge\" when you're satisfied.",
+      },
+      {
+        type: "concept",
+        title: "Why not just push to main directly?",
+        text: "PRs create a clear record of what changed and why. They give you a review checkpoint before code goes live. If you're deploying to Vercel, merging a PR to main triggers an automatic deployment — so PRs also serve as a gate between 'work in progress' and 'live on the internet.' This matters when real users are visiting your site.",
+      },
+      {
+        type: "subheading",
+        text: "Code Review With Claude",
+      },
+      {
+        type: "paragraph",
+        text: "Before you commit or open a PR, you can ask Claude to review your changes. This is like having a second pair of eyes that catches bugs, suggests improvements, and makes sure you didn't leave any debug code behind.",
+      },
+      {
+        type: "prompt-card",
+        phrase: "Review my changes and suggest improvements before I commit",
+        explanation: "Claude runs git diff, reads every change, and gives you feedback on code quality, potential bugs, and things you might have missed.",
+      },
+      {
+        type: "prompt-card",
+        phrase: "Summarize what changed since the last commit in plain English",
+        explanation: "Great for writing commit messages or PR descriptions. Claude reads the diff and explains what changed in human-readable language.",
+      },
+      {
+        type: "prompt-card",
+        phrase: "Check if there are any files I forgot to commit",
+        explanation: "Claude checks for untracked files, unstaged changes, and anything that might get left behind.",
+      },
+      {
+        type: "subheading",
+        text: "Handling Merge Conflicts",
+      },
+      {
+        type: "paragraph",
+        text: "Sometimes two branches change the same lines of code. When you try to merge them, Git doesn't know which version to keep, so it creates a \"merge conflict.\" This sounds scary but it's completely normal.",
+      },
+      {
+        type: "code",
+        code: "I have merge conflicts. Please resolve them, keeping the dark mode feature changes while preserving the existing layout fixes",
+        language: "text",
+        label: "Ask Claude to resolve conflicts",
+      },
+      {
+        type: "paragraph",
+        text: "Claude Code reads both versions of the conflicting code, understands the intent of each change, and merges them intelligently. If it's not sure what you want to keep, it asks before making a decision.",
+      },
+      {
+        type: "tip",
+        text: "The key to avoiding merge conflicts is to keep branches short-lived. Create a branch, make your changes, merge it back quickly. The longer a branch lives, the more it diverges from main, and the more likely you'll hit conflicts.",
+      },
+      {
+        type: "subheading",
+        text: "GitHub Issues: Track Bugs and Features",
+      },
+      {
+        type: "paragraph",
+        text: "GitHub Issues are a built-in to-do list for your project. You can create issues to track bugs, plan features, or note ideas for later. Claude Code can create and manage issues for you directly from the terminal.",
+      },
+      {
+        type: "prompt-card",
+        phrase: "Create a GitHub issue for the mobile navigation bug I just found",
+        explanation: "Claude creates a well-formatted issue on GitHub with a description of the bug, steps to reproduce, and relevant labels.",
+      },
+      {
+        type: "prompt-card",
+        phrase: "Show me all open GitHub issues for this project",
+        explanation: "Claude lists your open issues so you can decide what to work on next.",
+      },
+      {
+        type: "prompt-card",
+        phrase: "Fix issue #3 and reference it in the commit message",
+        explanation: "Claude fixes the issue and includes \"Fixes #3\" in the commit message, which automatically closes the issue when the code is merged.",
+      },
+      {
+        type: "subheading",
+        text: "The Full Pro Workflow",
+      },
+      {
+        type: "paragraph",
+        text: "Here's how it all comes together for a real feature:",
+      },
+      {
+        type: "step",
+        number: 1,
+        title: "Create a branch",
+        text: "\"Create a branch called feature/search-bar\" — keeps your work separate from main.",
+      },
+      {
+        type: "step",
+        number: 2,
+        title: "Build the feature",
+        text: "Work with Claude Code to build, iterate, and refine your feature on the branch.",
+      },
+      {
+        type: "step",
+        number: 3,
+        title: "Review your changes",
+        text: "\"Review my changes before I commit\" — catch issues before they leave your machine.",
       },
       {
         type: "step",
         number: 4,
-        title: "Push to GitHub",
-        text: "Upload your local changes to GitHub so they're backed up and shareable:",
+        title: "Commit and push",
+        text: "\"Commit these changes and push to GitHub\" — save your work and upload it.",
       },
       {
-        type: "code",
-        code: "Push this branch to GitHub",
-        language: "text",
-        label: "Pushing to GitHub",
+        type: "step",
+        number: 5,
+        title: "Open a pull request",
+        text: "\"Create a pull request for this branch\" — propose merging your feature into main.",
       },
       {
-        type: "subheading",
-        text: "Useful Git Prompts for Claude Code",
+        type: "step",
+        number: 6,
+        title: "Merge",
+        text: "Review the PR on GitHub, then merge it. If you're deployed on Vercel, your site updates automatically.",
       },
       {
-        type: "prompt-card",
-        phrase: "Show me what changed since the last commit",
-        explanation: "Claude will run git diff and summarize the changes in plain English. Great for reviewing before you commit.",
-      },
-      {
-        type: "prompt-card",
-        phrase: "Merge the feature branch back into main",
-        explanation: "When your feature is done and tested, Claude will merge it back into the main branch, handling any conflicts that arise.",
-      },
-      {
-        type: "tip",
-        text: "You don't need to memorize Git commands. Just describe what you want in plain English and Claude Code handles the Git operations. \"Save my progress\", \"create a new branch for the login feature\", \"undo the last commit\" — Claude understands all of these.",
+        type: "quiz",
+        question: "Why should you use a pull request instead of pushing directly to main?",
+        options: [
+          "GitHub requires pull requests for all changes",
+          "Pull requests make your code run faster",
+          "Pull requests give you a review checkpoint before changes go live",
+          "You can't push to main without a pull request",
+        ],
+        correctIndex: 2,
+        explanation: "Pull requests create a review point where you can check your changes one more time before they become part of your main branch. This is especially important when your main branch auto-deploys to a live site.",
       },
     ],
   },

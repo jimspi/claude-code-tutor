@@ -32,6 +32,14 @@ const nudges: Record<string, TryItForRealProps> = {
     message: "Go create a save point for any project on your computer. Practice before you need it.",
     command: "git init && git add . && git commit -m \"initial save point\"",
   },
+  "1-6": {
+    message: "Set up GitHub right now. Create your account and push your first project.",
+    command: "claude \"set up git and push this project to GitHub\"",
+  },
+  "3-6": {
+    message: "Deploy one of the projects you built in this level. See it live on the internet.",
+    command: "npx vercel",
+  },
   "4-1": {
     message: "Create a CLAUDE.md file for one of your projects right now.",
     command: "claude /init",

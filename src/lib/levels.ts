@@ -52,6 +52,12 @@ export const levels: LevelMeta[] = [
         subtitle: "Understand the permission model and how Claude sees your project",
         estimatedMinutes: 6,
       },
+      {
+        id: "1-6",
+        title: "Setting Up GitHub",
+        subtitle: "Create your account and learn to save your projects online",
+        estimatedMinutes: 10,
+      },
     ],
   },
   {
@@ -124,6 +130,12 @@ export const levels: LevelMeta[] = [
         subtitle: "Errors happen. Here is exactly what to do.",
         estimatedMinutes: 8,
       },
+      {
+        id: "3-6",
+        title: "Deploying Your Site to Vercel",
+        subtitle: "Put your project on the internet for anyone to see",
+        estimatedMinutes: 10,
+      },
     ],
   },
   {
@@ -180,8 +192,8 @@ export const levels: LevelMeta[] = [
       },
       {
         id: "5-2",
-        title: "Working With GitHub",
-        subtitle: "Version control made simple with Claude Code",
+        title: "Advanced GitHub Workflows",
+        subtitle: "Pull requests, branches, and team collaboration",
         estimatedMinutes: 9,
       },
       {

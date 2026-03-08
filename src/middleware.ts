@@ -32,16 +32,17 @@ export async function middleware(request: NextRequest) {
   // Handle auth code exchange (magic link PKCE flow)
   const code = request.nextUrl.searchParams.get("code");
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code);
-    // Strip the code param and redirect cleanly
-    const url = request.nextUrl.clone();
-    url.searchParams.delete("code");
-    const redirectResponse = NextResponse.redirect(url);
-    // Copy session cookies to the redirect response
-    supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie.name, cookie.value);
-    });
-    return redirectResponse;
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      // Strip the code param and redirect cleanly
+      const url = request.nextUrl.clone();
+      url.searchParams.delete("code");
+      // Return the supabaseResponse with cookies already set by setAll,
+      // but as a redirect by setting the Location header + 302 status
+      return NextResponse.redirect(url, {
+        headers: supabaseResponse.headers,
+      });
+    }
   }
 
   // Refresh the session — important for Server Components

@@ -29,6 +29,21 @@ export async function middleware(request: NextRequest) {
     }
   );
 
+  // Handle auth code exchange (magic link PKCE flow)
+  const code = request.nextUrl.searchParams.get("code");
+  if (code) {
+    await supabase.auth.exchangeCodeForSession(code);
+    // Strip the code param and redirect cleanly
+    const url = request.nextUrl.clone();
+    url.searchParams.delete("code");
+    const redirectResponse = NextResponse.redirect(url);
+    // Copy session cookies to the redirect response
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value);
+    });
+    return redirectResponse;
+  }
+
   // Refresh the session — important for Server Components
   await supabase.auth.getUser();
 

@@ -2,6 +2,8 @@
 
 import { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
+import PaywallGate from "@/components/PaywallGate";
+import { useAuth } from "@/contexts/AuthContext";
 import { analyzePrompt, type PromptAnalysis } from "@/lib/promptAnalyzer";
 import { promptTemplates, EXAMPLE_PROMPTS, type PromptTemplate } from "@/data/promptTemplates";
 
@@ -686,7 +688,10 @@ function CompareTool() {
 
 // ─── Main Page ───
 export default function PlaygroundPage() {
+  const { paid, loading } = useAuth();
   const [activeTool, setActiveTool] = useState<Tool>("analyzer");
+
+  if (!loading && !paid) return <PaywallGate />;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">

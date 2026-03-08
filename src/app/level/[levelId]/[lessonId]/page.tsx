@@ -8,39 +8,31 @@ import LessonRenderer from "@/components/LessonRenderer";
 import LessonComplete from "@/components/LessonComplete";
 import TryItForReal from "@/components/TryItForReal";
 import AudioReader from "@/components/AudioReader";
-import { useAuth } from "@/contexts/AuthContext";
-import AuthButton from "@/components/AuthButton";
+import PaywallGate from "@/components/PaywallGate";
+import { useAuth, FREE_LESSONS } from "@/contexts/AuthContext";
 
 export default function LessonPage() {
   const params = useParams();
   const levelId = params.levelId as string;
   const lessonId = params.lessonId as string;
-  const { user, loading } = useAuth();
+  const { user, loading, paid } = useAuth();
 
   const level = getLevelById(levelId);
   const lesson = getLessonById(levelId, lessonId);
   const content = getLessonContent(lessonId);
   const { prev, next } = getAdjacentLessons(levelId, lessonId);
 
-  if (!loading && !user) {
-    return (
-      <div className="max-w-md mx-auto px-4 py-20 text-center">
-        <div className="w-14 h-14 mx-auto mb-5 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center">
-          <svg className="w-7 h-7 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-          </svg>
-        </div>
-        <h2 className="font-heading text-xl font-bold text-slate-900 mb-2">
-          Sign in to access lessons
-        </h2>
-        <p className="text-sm text-stone-500 mb-6">
-          Create a free account to start learning and track your progress across devices.
-        </p>
-        <div className="inline-flex">
-          <AuthButton />
-        </div>
-      </div>
-    );
+  const isFreeLesson = FREE_LESSONS.includes(lessonId);
+  const hasAccess = paid || isFreeLesson;
+
+  // Not signed in and not a free lesson — show paywall
+  if (!loading && !user && !isFreeLesson) {
+    return <PaywallGate />;
+  }
+
+  // Signed in but not paid and not a free lesson — show paywall
+  if (!loading && user && !hasAccess) {
+    return <PaywallGate />;
   }
 
   if (!level || !lesson || !content) {
@@ -64,6 +56,16 @@ export default function LessonPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      {/* Free lesson badge */}
+      {isFreeLesson && !paid && (
+        <div className="mb-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-xs font-medium text-teal-700">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Free preview
+        </div>
+      )}
+
       {/* Breadcrumb */}
       <nav className="mb-6">
         <Link
@@ -108,6 +110,27 @@ export default function LessonPage() {
 
       {/* Audio reader */}
       <AudioReader blocks={content.blocks} />
+
+      {/* Upsell at bottom of free lesson */}
+      {isFreeLesson && !paid && user && (
+        <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-center">
+          <p className="text-teal-400 text-xs font-bold uppercase tracking-widest mb-2">
+            Enjoying the course?
+          </p>
+          <p className="text-white font-heading text-lg font-bold mb-1">
+            Unlock all 27 lessons for $100
+          </p>
+          <p className="text-stone-400 text-sm mb-4">
+            One-time payment. Lifetime access.
+          </p>
+          <Link
+            href="/pricing"
+            className="inline-block px-6 py-2.5 bg-teal-600 text-white font-semibold text-sm rounded-xl hover:bg-teal-700 transition-colors"
+          >
+            Unlock Full Course
+          </Link>
+        </div>
+      )}
 
       {/* Navigation */}
       <div className="mt-8 flex items-center justify-between gap-4">

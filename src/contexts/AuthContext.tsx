@@ -13,21 +13,35 @@ import { createClient } from "@/lib/supabase/client";
 interface AuthContextValue {
   user: User | null;
   loading: boolean;
+  paid: boolean;
   signIn: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: true,
+  paid: false,
   signIn: async () => ({ error: null }),
   signOut: async () => {},
+  refreshUser: async () => {},
 });
+
+// Lesson 1-1 is free for everyone as a teaser
+export const FREE_LESSONS = ["1-1"];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+
+  const paid = user?.user_metadata?.paid === true;
+
+  const refreshUser = useCallback(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    setUser(user);
+  }, [supabase]);
 
   useEffect(() => {
     // Get initial session
@@ -65,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, paid, signIn, signOut, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

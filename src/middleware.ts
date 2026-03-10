@@ -29,11 +29,46 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Let the /auth/callback route handle code exchange directly
-  // (middleware would lose cookies during redirect)
-  const isAuthCallback = request.nextUrl.pathname === "/auth/callback";
-  if (isAuthCallback) {
-    return supabaseResponse;
+  // Handle auth code exchange (PKCE magic link flow)
+  const code = request.nextUrl.searchParams.get("code");
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      const url = request.nextUrl.clone();
+      url.searchParams.delete("code");
+      if (url.pathname === "/auth/callback") {
+        url.pathname = "/";
+      }
+      // Create redirect and copy all auth cookies from supabaseResponse
+      const redirectResponse = NextResponse.redirect(url);
+      supabaseResponse.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie);
+      });
+      return redirectResponse;
+    }
+  }
+
+  // Handle token_hash flow (non-PKCE magic links)
+  const tokenHash = request.nextUrl.searchParams.get("token_hash");
+  const type = request.nextUrl.searchParams.get("type");
+  if (tokenHash && type) {
+    const { error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: type as "email" | "magiclink",
+    });
+    if (!error) {
+      const url = request.nextUrl.clone();
+      url.searchParams.delete("token_hash");
+      url.searchParams.delete("type");
+      if (url.pathname === "/auth/callback") {
+        url.pathname = "/";
+      }
+      const redirectResponse = NextResponse.redirect(url);
+      supabaseResponse.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie);
+      });
+      return redirectResponse;
+    }
   }
 
   // Refresh the session — important for Server Components

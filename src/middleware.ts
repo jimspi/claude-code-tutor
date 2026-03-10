@@ -29,20 +29,11 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Handle auth code exchange (magic link PKCE flow)
-  const code = request.nextUrl.searchParams.get("code");
-  if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      // Strip the code param and redirect cleanly
-      const url = request.nextUrl.clone();
-      url.searchParams.delete("code");
-      // Return the supabaseResponse with cookies already set by setAll,
-      // but as a redirect by setting the Location header + 302 status
-      return NextResponse.redirect(url, {
-        headers: supabaseResponse.headers,
-      });
-    }
+  // Let the /auth/callback route handle code exchange directly
+  // (middleware would lose cookies during redirect)
+  const isAuthCallback = request.nextUrl.pathname === "/auth/callback";
+  if (isAuthCallback) {
+    return supabaseResponse;
   }
 
   // Refresh the session — important for Server Components

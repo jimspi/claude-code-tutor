@@ -53,8 +53,9 @@ export async function initProgress(userId: string | null): Promise<void> {
   currentUserId = userId;
 
   if (!userId) {
-    // Guest mode — load from localStorage
-    cachedProgress = loadFromLocalStorage();
+    // Guest mode — always start fresh (don't inherit previous user's localStorage)
+    cachedProgress = getDefaultProgress();
+    localStorage.removeItem(STORAGE_KEY);
     return;
   }
 

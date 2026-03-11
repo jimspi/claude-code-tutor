@@ -66,44 +66,23 @@ export async function initProgress(userId: string | null): Promise<void> {
     .eq("user_id", userId)
     .single();
 
-  const localProgress = loadFromLocalStorage();
-
   if (error || !data) {
-    // No DB row yet — merge localStorage into a new DB row
-    cachedProgress = {
-      completedLessons: [...localProgress.completedLessons],
-      earnedBadges: recalculateBadges(localProgress.completedLessons),
-    };
-    // Create the row in Supabase
+    // New user — start with empty progress (don't inherit localStorage from previous account)
+    cachedProgress = getDefaultProgress();
     await supabase.from("user_progress").upsert({
       user_id: userId,
-      completed_lessons: cachedProgress.completedLessons,
-      earned_badges: cachedProgress.earnedBadges,
+      completed_lessons: [],
+      earned_badges: [],
     });
   } else {
-    // DB row exists — merge: union of local + DB completed lessons
-    const dbLessons: string[] = data.completed_lessons ?? [];
-    const merged = Array.from(
-      new Set([...dbLessons, ...localProgress.completedLessons])
-    );
-    const badges = recalculateBadges(merged);
-
+    // Existing user — load their progress from DB
     cachedProgress = {
-      completedLessons: merged,
-      earnedBadges: badges,
+      completedLessons: data.completed_lessons ?? [],
+      earnedBadges: data.earned_badges ?? [],
     };
-
-    // If merge added new lessons, persist back to both stores
-    if (merged.length > dbLessons.length) {
-      await supabase.from("user_progress").upsert({
-        user_id: userId,
-        completed_lessons: merged,
-        earned_badges: badges,
-      });
-    }
   }
 
-  // Always sync merged result back to localStorage
+  // Overwrite localStorage with this user's actual progress
   localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedProgress));
 }
 

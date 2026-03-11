@@ -3,42 +3,53 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
-const COOLDOWN_SECONDS = 60;
-
 export default function AuthButton() {
   const { user, loading, signIn, signOut } = useAuth();
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle"
-  );
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [showForm, setShowForm] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
-  // Countdown timer
+  // Countdown timer — reset to idle when cooldown expires
   useEffect(() => {
     if (cooldown <= 0) return;
     const timer = setInterval(() => {
-      setCooldown((c) => c - 1);
+      setCooldown((c) => {
+        if (c <= 1) {
+          setStatus("idle");
+          return 0;
+        }
+        return c - 1;
+      });
     }, 1000);
     return () => clearInterval(timer);
   }, [cooldown]);
 
+  // Reset form state whenever the form is opened
+  useEffect(() => {
+    if (showForm) {
+      setStatus("idle");
+      setCooldown(0);
+    }
+  }, [showForm]);
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!email.trim() || cooldown > 0) return;
+      if (!email.trim() || status === "sending" || cooldown > 0) return;
       setStatus("sending");
       const { error } = await signIn(email.trim());
       if (error) {
-        // Rate limit or other error — start cooldown so they don't hammer it
-        setStatus("error");
-        setCooldown(COOLDOWN_SECONDS);
+        // Rate limited — show the "check your email" message since a link
+        // was already sent recently, and start a short cooldown
+        setStatus("sent");
+        setCooldown(30);
       } else {
         setStatus("sent");
-        setCooldown(COOLDOWN_SECONDS);
+        setCooldown(60);
       }
     },
-    [email, cooldown, signIn]
+    [email, status, cooldown, signIn]
   );
 
   if (loading) return null;
@@ -76,10 +87,7 @@ export default function AuthButton() {
         type="email"
         placeholder="you@email.com"
         value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-          if (status === "error") setStatus("idle");
-        }}
+        onChange={(e) => setEmail(e.target.value)}
         className="w-40 sm:w-48 text-xs px-2.5 py-1.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
         autoFocus
       />
@@ -90,23 +98,17 @@ export default function AuthButton() {
       ) : (
         <button
           type="submit"
-          disabled={status === "sending" || cooldown > 0}
+          disabled={status === "sending"}
           className="text-xs font-semibold text-white px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 transition-colors whitespace-nowrap"
         >
-          {status === "sending"
-            ? "Sending..."
-            : cooldown > 0
-            ? `Wait ${cooldown}s`
-            : "Send link"}
+          {status === "sending" ? "Sending..." : "Send link"}
         </button>
       )}
       <button
         type="button"
         onClick={() => {
           setShowForm(false);
-          setStatus("idle");
           setEmail("");
-          setCooldown(0);
         }}
         className="text-stone-400 hover:text-stone-600 p-1"
       >
@@ -114,11 +116,6 @@ export default function AuthButton() {
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
-      {status === "error" && (
-        <span className="text-xs text-amber-600 whitespace-nowrap">
-          Link already sent — check your email{cooldown > 0 && ` (${cooldown}s)`}
-        </span>
-      )}
     </form>
   );
 }

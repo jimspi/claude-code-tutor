@@ -8,48 +8,23 @@ export default function AuthButton() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [showForm, setShowForm] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
-
-  // Countdown timer — reset to idle when cooldown expires
-  useEffect(() => {
-    if (cooldown <= 0) return;
-    const timer = setInterval(() => {
-      setCooldown((c) => {
-        if (c <= 1) {
-          setStatus("idle");
-          return 0;
-        }
-        return c - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [cooldown]);
 
   // Reset form state whenever the form is opened
   useEffect(() => {
     if (showForm) {
       setStatus("idle");
-      setCooldown(0);
     }
   }, [showForm]);
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!email.trim() || status === "sending" || cooldown > 0) return;
+    async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
+      if (!email.trim() || status === "sending") return;
       setStatus("sending");
-      const { error } = await signIn(email.trim());
-      if (error) {
-        // Rate limited — show the "check your email" message since a link
-        // was already sent recently, and start a short cooldown
-        setStatus("sent");
-        setCooldown(30);
-      } else {
-        setStatus("sent");
-        setCooldown(60);
-      }
+      await signIn(email.trim());
+      setStatus("sent");
     },
-    [email, status, cooldown, signIn]
+    [email, status, signIn]
   );
 
   if (loading) return null;
@@ -92,9 +67,18 @@ export default function AuthButton() {
         autoFocus
       />
       {status === "sent" ? (
-        <span className="text-xs text-emerald-600 font-medium whitespace-nowrap">
-          Check your email!{cooldown > 0 && ` (${cooldown}s)`}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-emerald-600 font-medium whitespace-nowrap">
+            Check your email!
+          </span>
+          <button
+            type="button"
+            onClick={() => handleSubmit()}
+            className="text-xs text-stone-500 hover:text-teal-600 font-medium whitespace-nowrap transition-colors"
+          >
+            Resend
+          </button>
+        </div>
       ) : (
         <button
           type="submit"

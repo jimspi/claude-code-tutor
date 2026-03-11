@@ -85,6 +85,10 @@ export const lessonContent: Record<string, LessonContent> = {
         text: "You don't need to know how to code. You don't need a computer science degree. You just need to be able to describe what you want, and Claude Code will write the code, create the files, and build it for you.",
       },
       {
+        type: "tip",
+        text: "To actively build with Claude Code, you'll need a Claude Pro subscription ($20/month) from Anthropic. This course teaches you everything you need to know to get the most out of it.",
+      },
+      {
         type: "concept",
         title: "Think of it this way",
         text: "Imagine having a senior developer sitting next to you who never gets tired, never judges your questions, and works at lightning speed. You say \"build me a website for my bakery\" and they start typing away, creating files, writing code, and showing you the result. That's Claude Code.",

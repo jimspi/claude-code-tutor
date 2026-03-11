@@ -40,97 +40,117 @@ function LandingPage() {
   const totalHours = Math.round(getTotalMinutes() / 60);
 
   return (
-    <div className="-mt-[57px]"> {/* offset the TopBar */}
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,200,190,0.15),transparent)]" />
-        <div className="relative max-w-5xl mx-auto px-6 pt-28 pb-20 sm:pt-36 sm:pb-28 text-center">
-          <p className="text-teal-400 text-xs font-bold uppercase tracking-[0.2em] mb-4">
-            An interactive course for complete beginners
-          </p>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-6">
-            Learn to build real software
-            <br />
-            <span className="text-teal-400">with AI</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-stone-300 max-w-2xl mx-auto leading-relaxed mb-10">
-            Claude Code is the tool that turns your ideas into working apps.
-            This course teaches you how to use it — no coding experience needed.
-            Go from zero to deploying real projects.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+    <div className="min-h-screen bg-stone-50">
+      {/* Top nav */}
+      <header className="border-b border-stone-200 bg-white/80 backdrop-blur-md sticky top-0 z-30">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div>
+            <h1 className="font-heading text-lg font-bold text-slate-900">Claude Code Academy</h1>
+            <p className="text-xs text-stone-400">Learn to build with AI</p>
+          </div>
+          <div className="flex items-center gap-3">
             <Link
               href="/level/1/1-1"
-              className="px-8 py-3.5 bg-teal-500 text-white font-semibold text-sm rounded-xl hover:bg-teal-400 transition-colors shadow-lg shadow-teal-500/25"
+              className="hidden sm:inline-block text-xs font-medium text-stone-600 hover:text-teal-600 transition-colors"
             >
-              Try the Free Lesson
+              Free Lesson
             </Link>
-            <Link
-              href="/pricing"
-              className="px-8 py-3.5 bg-white/10 text-white font-semibold text-sm rounded-xl hover:bg-white/20 transition-colors border border-white/20"
-            >
-              Unlock Full Course — $100
-            </Link>
+            <AuthButton />
           </div>
-          <p className="text-stone-500 text-sm">
-            {totalLessons} lessons &middot; {totalHours}+ hours &middot; Lifetime access
-          </p>
         </div>
+      </header>
+
+      {/* Hero */}
+      <section className="max-w-4xl mx-auto px-6 pt-16 pb-12 sm:pt-24 sm:pb-16 text-center">
+        <span className="inline-block text-xs font-bold uppercase tracking-[0.15em] text-teal-600 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full mb-6">
+          For complete beginners
+        </span>
+        <h2 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.1] mb-5">
+          Learn to build real software{" "}
+          <span className="text-teal-600">with AI</span>
+        </h2>
+        <p className="text-lg text-stone-500 max-w-2xl mx-auto leading-relaxed mb-8">
+          Claude Code turns your ideas into working apps. This course teaches you
+          how to use it — no coding experience needed. Go from zero to deploying
+          real projects, one lesson at a time.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+          <Link
+            href="/level/1/1-1"
+            className="px-7 py-3 bg-teal-600 text-white font-semibold text-sm rounded-xl hover:bg-teal-700 transition-colors shadow-sm"
+          >
+            Try the Free Lesson
+          </Link>
+          <Link
+            href="/pricing"
+            className="px-7 py-3 bg-white text-slate-900 font-semibold text-sm rounded-xl hover:bg-stone-100 transition-colors border border-stone-200 shadow-sm"
+          >
+            Unlock Full Course — $100
+          </Link>
+        </div>
+        <p className="text-sm text-stone-400">
+          {totalLessons} lessons &middot; ~{totalHours} hours &middot; Lifetime access
+        </p>
       </section>
 
-      {/* What you'll learn */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
-        <div className="text-center mb-14">
-          <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">
+      {/* Course outline */}
+      <section className="max-w-4xl mx-auto px-6 pb-16">
+        <div className="mb-10">
+          <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
             What you&apos;ll learn
-          </h2>
-          <p className="text-stone-500 max-w-lg mx-auto">
+          </h3>
+          <p className="text-stone-500 text-sm">
             Five levels that take you from &ldquo;what is a terminal?&rdquo; to deploying
             your own apps on the internet.
           </p>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {levels.map((level) => (
-            <div
-              key={level.id}
-              className="p-6 rounded-2xl border border-stone-200 bg-white hover:shadow-lg transition-shadow"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-teal-600">
-                  Level {level.number}
-                </span>
-                <span className="text-xs text-stone-400">&middot; {level.lessons.length} lessons</span>
+        <div className="space-y-4">
+          {levels.map((level) => {
+            const totalMins = level.lessons.reduce((s, l) => s + l.estimatedMinutes, 0);
+            return (
+              <div
+                key={level.id}
+                className="p-6 rounded-2xl border border-stone-200 bg-white hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-teal-600">
+                        Level {level.number}
+                      </span>
+                      <span className="text-xs text-stone-400">
+                        {level.subtitle}
+                      </span>
+                    </div>
+                    <h4 className="font-heading text-xl font-bold text-slate-900 mb-1">
+                      {level.title}
+                    </h4>
+                    <p className="text-sm text-stone-500">
+                      {level.lessons.length} lessons &middot; ~{totalMins} min
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0 hidden sm:flex items-center gap-2 text-stone-300">
+                    {level.lessons.map((lesson) => (
+                      <span
+                        key={lesson.id}
+                        className="w-2.5 h-2.5 rounded-full border-2 border-stone-300"
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-1">
-                {level.title}
-              </h3>
-              <p className="text-sm text-stone-500">{level.subtitle}</p>
-            </div>
-          ))}
-          {/* Extras card */}
-          <div className="p-6 rounded-2xl border border-stone-200 bg-white hover:shadow-lg transition-shadow">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
-                Bonus
-              </span>
-            </div>
-            <h3 className="font-heading text-lg font-bold text-slate-900 mb-1">
-              Tools &amp; Resources
-            </h3>
-            <p className="text-sm text-stone-500">
-              Prompt playground, cheat sheet, glossary, and interactive terminal exercises.
-            </p>
-          </div>
+            );
+          })}
         </div>
       </section>
 
       {/* How it works */}
-      <section className="bg-stone-100 border-y border-stone-200">
-        <div className="max-w-4xl mx-auto px-6 py-20">
-          <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 text-center mb-14">
+      <section className="border-y border-stone-200 bg-white">
+        <div className="max-w-4xl mx-auto px-6 py-16">
+          <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 mb-10 text-center">
             How it works
-          </h2>
-          <div className="grid sm:grid-cols-3 gap-10">
+          </h3>
+          <div className="grid sm:grid-cols-3 gap-8">
             {[
               {
                 step: "01",
@@ -139,7 +159,7 @@ function LandingPage() {
               },
               {
                 step: "02",
-                title: "Practice with prompts",
+                title: "Practice prompts",
                 desc: "Use the Prompt Playground to craft real instructions and see how Claude responds.",
               },
               {
@@ -149,12 +169,12 @@ function LandingPage() {
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-teal-100 text-teal-700 font-heading font-extrabold text-sm flex items-center justify-center">
+                <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-teal-50 border border-teal-200 text-teal-600 font-heading font-extrabold text-xs flex items-center justify-center">
                   {item.step}
                 </div>
-                <h3 className="font-heading text-base font-bold text-slate-900 mb-2">
+                <h4 className="font-heading text-base font-bold text-slate-900 mb-1.5">
                   {item.title}
-                </h3>
+                </h4>
                 <p className="text-sm text-stone-500 leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -162,37 +182,41 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing CTA */}
-      <section className="max-w-3xl mx-auto px-6 py-20 text-center">
-        <h2 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">
+      {/* Pricing */}
+      <section className="max-w-4xl mx-auto px-6 py-16 text-center">
+        <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
           One price. Everything included.
-        </h2>
-        <p className="text-stone-500 max-w-lg mx-auto mb-8">
+        </h3>
+        <p className="text-stone-500 text-sm max-w-md mx-auto mb-8">
           No subscriptions, no upsells. Pay once and get every lesson, every tool,
           and every future update.
         </p>
-        <div className="inline-block p-8 rounded-2xl border border-stone-200 bg-white shadow-xl mb-8">
-          <div className="flex items-baseline justify-center gap-1 mb-2">
-            <span className="text-5xl font-extrabold text-slate-900">$100</span>
+        <div className="inline-block p-8 rounded-2xl border border-stone-200 bg-white shadow-sm mb-6">
+          <div className="flex items-baseline justify-center gap-1 mb-1">
+            <span className="font-heading text-4xl font-extrabold text-slate-900">$100</span>
             <span className="text-stone-400 text-sm">one-time</span>
           </div>
-          <p className="text-xs text-stone-400 mb-6">Lifetime access. 30-day money-back guarantee.</p>
+          <p className="text-xs text-stone-400 mb-5">Lifetime access &middot; 30-day money-back guarantee</p>
           <Link
             href="/pricing"
-            className="inline-block px-8 py-3.5 bg-teal-600 text-white font-semibold text-sm rounded-xl hover:bg-teal-700 transition-colors shadow-lg shadow-teal-200"
+            className="inline-block px-7 py-3 bg-teal-600 text-white font-semibold text-sm rounded-xl hover:bg-teal-700 transition-colors"
           >
             Get Started
           </Link>
         </div>
         <p className="text-sm text-stone-400">
-          Or <Link href="/level/1/1-1" className="text-teal-600 font-medium hover:text-teal-700">try the first lesson free</Link> — no account required.
+          Or{" "}
+          <Link href="/level/1/1-1" className="text-teal-600 font-medium hover:text-teal-700 transition-colors">
+            try the first lesson free
+          </Link>{" "}
+          — no account required.
         </p>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-stone-200 bg-stone-50">
-        <div className="max-w-5xl mx-auto px-6 py-8 text-center text-sm text-stone-400">
-          <p>Claude Code Academy &middot; Built to help anyone learn to build with AI.</p>
+      <footer className="border-t border-stone-200">
+        <div className="max-w-5xl mx-auto px-6 py-6 text-center text-xs text-stone-400">
+          Claude Code Academy &middot; Built to help anyone learn to build with AI.
         </div>
       </footer>
     </div>

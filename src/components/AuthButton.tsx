@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+
+const COOLDOWN_SECONDS = 60;
 
 export default function AuthButton() {
   const { user, loading, signIn, signOut } = useAuth();
@@ -10,6 +12,34 @@ export default function AuthButton() {
     "idle"
   );
   const [showForm, setShowForm] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  // Countdown timer
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((c) => c - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!email.trim() || cooldown > 0) return;
+      setStatus("sending");
+      const { error } = await signIn(email.trim());
+      if (error) {
+        // Rate limit or other error — start cooldown so they don't hammer it
+        setStatus("error");
+        setCooldown(COOLDOWN_SECONDS);
+      } else {
+        setStatus("sent");
+        setCooldown(COOLDOWN_SECONDS);
+      }
+    },
+    [email, cooldown, signIn]
+  );
 
   if (loading) return null;
 
@@ -41,16 +71,7 @@ export default function AuthButton() {
   }
 
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        if (!email.trim()) return;
-        setStatus("sending");
-        const { error } = await signIn(email.trim());
-        setStatus(error ? "error" : "sent");
-      }}
-      className="flex items-center gap-2"
-    >
+    <form onSubmit={handleSubmit} className="flex items-center gap-2">
       <input
         type="email"
         placeholder="you@email.com"
@@ -64,15 +85,19 @@ export default function AuthButton() {
       />
       {status === "sent" ? (
         <span className="text-xs text-emerald-600 font-medium whitespace-nowrap">
-          Check your email!
+          Check your email!{cooldown > 0 && ` (${cooldown}s)`}
         </span>
       ) : (
         <button
           type="submit"
-          disabled={status === "sending"}
+          disabled={status === "sending" || cooldown > 0}
           className="text-xs font-semibold text-white px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 transition-colors whitespace-nowrap"
         >
-          {status === "sending" ? "Sending..." : "Send link"}
+          {status === "sending"
+            ? "Sending..."
+            : cooldown > 0
+            ? `Wait ${cooldown}s`
+            : "Send link"}
         </button>
       )}
       <button
@@ -81,6 +106,7 @@ export default function AuthButton() {
           setShowForm(false);
           setStatus("idle");
           setEmail("");
+          setCooldown(0);
         }}
         className="text-stone-400 hover:text-stone-600 p-1"
       >
@@ -89,7 +115,9 @@ export default function AuthButton() {
         </svg>
       </button>
       {status === "error" && (
-        <span className="text-xs text-red-500">Failed. Try again.</span>
+        <span className="text-xs text-amber-600 whitespace-nowrap">
+          Link already sent — check your email{cooldown > 0 && ` (${cooldown}s)`}
+        </span>
       )}
     </form>
   );

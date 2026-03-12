@@ -14,7 +14,8 @@ interface AuthContextValue {
   user: User | null;
   loading: boolean;
   paid: boolean;
-  signIn: (email: string) => Promise<{ error: string | null }>;
+  signInWithGoogle: () => Promise<{ error: string | null }>;
+  signInWithEmail: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -23,7 +24,8 @@ const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: true,
   paid: false,
-  signIn: async () => ({ error: null }),
+  signInWithGoogle: async () => ({ error: null }),
+  signInWithEmail: async () => ({ error: null }),
   signOut: async () => {},
   refreshUser: async () => {},
 });
@@ -61,9 +63,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
-  const signIn = useCallback(
+  const signInWithGoogle = useCallback(async () => {
+    const returnTo = window.location.pathname;
+    const redirectUrl = new URL("/auth/callback", window.location.origin);
+    if (returnTo && returnTo !== "/") {
+      redirectUrl.searchParams.set("returnTo", returnTo);
+    }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: redirectUrl.toString(),
+      },
+    });
+    return { error: error?.message ?? null };
+  }, [supabase]);
+
+  const signInWithEmail = useCallback(
     async (email: string) => {
-      // Preserve current path so user returns here after clicking the magic link
       const returnTo = window.location.pathname;
       const redirectUrl = new URL("/auth/callback", window.location.origin);
       if (returnTo && returnTo !== "/") {
@@ -85,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, paid, signIn, signOut, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, paid, signInWithGoogle, signInWithEmail, signOut, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

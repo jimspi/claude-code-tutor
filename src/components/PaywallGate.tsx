@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import AuthButton from "./AuthButton";
+import { AuthSignInBlock } from "./AuthButton";
 
 export default function PaywallGate() {
   const { user, loading } = useAuth();
@@ -42,9 +42,7 @@ export default function PaywallGate() {
         <p className="text-sm text-stone-500 mb-6">
           Create a free account, then unlock the full course.
         </p>
-        <div className="inline-flex">
-          <AuthButton />
-        </div>
+        <AuthSignInBlock />
       </div>
     );
   }

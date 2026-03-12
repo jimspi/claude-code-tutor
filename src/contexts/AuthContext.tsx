@@ -63,10 +63,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = useCallback(
     async (email: string) => {
+      // Preserve current path so user returns here after clicking the magic link
+      const returnTo = window.location.pathname;
+      const redirectUrl = new URL("/auth/callback", window.location.origin);
+      if (returnTo && returnTo !== "/") {
+        redirectUrl.searchParams.set("returnTo", returnTo);
+      }
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: redirectUrl.toString(),
         },
       });
       return { error: error?.message ?? null };

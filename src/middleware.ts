@@ -29,23 +29,39 @@ export async function middleware(request: NextRequest) {
     }
   );
 
+  // Read returnTo from query params (preserved from signIn redirect URL)
+  const returnTo = request.nextUrl.searchParams.get("returnTo");
+
+  // Helper: build redirect URL after successful auth
+  function buildAuthRedirectUrl() {
+    const url = request.nextUrl.clone();
+    url.searchParams.delete("code");
+    url.searchParams.delete("token_hash");
+    url.searchParams.delete("type");
+    url.searchParams.delete("returnTo");
+    // Redirect to returnTo path, or home
+    url.pathname = returnTo || "/";
+    return url;
+  }
+
   // Handle auth code exchange (PKCE magic link flow)
   const code = request.nextUrl.searchParams.get("code");
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const url = request.nextUrl.clone();
-      url.searchParams.delete("code");
-      if (url.pathname === "/auth/callback") {
-        url.pathname = "/";
-      }
-      // Create redirect and copy all auth cookies from supabaseResponse
+      const url = buildAuthRedirectUrl();
       const redirectResponse = NextResponse.redirect(url);
       supabaseResponse.cookies.getAll().forEach((cookie) => {
         redirectResponse.cookies.set(cookie);
       });
       return redirectResponse;
     }
+    // PKCE exchange failed (e.g., opened in different browser, expired code).
+    // Redirect to home with an error hint so the user knows to try again.
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.search = "?auth_error=link_expired";
+    return NextResponse.redirect(url);
   }
 
   // Handle token_hash flow (non-PKCE magic links)
@@ -57,18 +73,18 @@ export async function middleware(request: NextRequest) {
       type: type as "email" | "magiclink",
     });
     if (!error) {
-      const url = request.nextUrl.clone();
-      url.searchParams.delete("token_hash");
-      url.searchParams.delete("type");
-      if (url.pathname === "/auth/callback") {
-        url.pathname = "/";
-      }
+      const url = buildAuthRedirectUrl();
       const redirectResponse = NextResponse.redirect(url);
       supabaseResponse.cookies.getAll().forEach((cookie) => {
         redirectResponse.cookies.set(cookie);
       });
       return redirectResponse;
     }
+    // Token verification failed
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.search = "?auth_error=link_expired";
+    return NextResponse.redirect(url);
   }
 
   // Refresh the session — important for Server Components

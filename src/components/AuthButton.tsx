@@ -6,13 +6,15 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function AuthButton() {
   const { user, loading, signIn, signOut } = useAuth();
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
   const [showForm, setShowForm] = useState(false);
 
   // Reset form state whenever the form is opened
   useEffect(() => {
     if (showForm) {
       setStatus("idle");
+      setErrorMsg("");
     }
   }, [showForm]);
 
@@ -21,8 +23,14 @@ export default function AuthButton() {
       if (e) e.preventDefault();
       if (!email.trim() || status === "sending") return;
       setStatus("sending");
-      await signIn(email.trim());
-      setStatus("sent");
+      setErrorMsg("");
+      const { error } = await signIn(email.trim());
+      if (error) {
+        setErrorMsg(error);
+        setStatus("error");
+      } else {
+        setStatus("sent");
+      }
     },
     [email, status, signIn]
   );
@@ -66,7 +74,20 @@ export default function AuthButton() {
         className="w-40 sm:w-48 text-xs px-2.5 py-1.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
         autoFocus
       />
-      {status === "sent" ? (
+      {status === "error" ? (
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-red-600 font-medium whitespace-nowrap max-w-[180px] truncate" title={errorMsg}>
+            {errorMsg || "Failed to send link"}
+          </span>
+          <button
+            type="button"
+            onClick={() => handleSubmit()}
+            className="text-xs text-stone-500 hover:text-teal-600 font-medium whitespace-nowrap transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      ) : status === "sent" ? (
         <div className="flex items-center gap-2">
           <span className="text-xs text-emerald-600 font-medium whitespace-nowrap">
             Check your email!

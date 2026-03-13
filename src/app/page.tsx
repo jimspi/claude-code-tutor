@@ -63,7 +63,7 @@ function LandingPage() {
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-16 pb-12 sm:pt-24 sm:pb-16 text-center">
         <span className="inline-block text-xs font-bold uppercase tracking-[0.15em] text-teal-600 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full mb-6">
-          For complete beginners
+          Learn to build real software with AI
         </span>
         <h2 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.1] mb-5">
           Learn to build real software{" "}
@@ -206,7 +206,7 @@ function LandingPage() {
             <span className="font-heading text-4xl font-extrabold text-slate-900">$100</span>
             <span className="text-stone-400 text-sm">one-time</span>
           </div>
-          <p className="text-xs text-stone-400 mb-5">Lifetime access &middot; 30-day money-back guarantee</p>
+          <p className="text-xs text-stone-400 mb-5">Lifetime access</p>
           <Link
             href="/pricing"
             className="inline-block px-7 py-3 bg-teal-600 text-white font-semibold text-sm rounded-xl hover:bg-teal-700 transition-colors"

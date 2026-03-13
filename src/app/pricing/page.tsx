@@ -74,7 +74,7 @@ export default function PricingPage() {
           {buying ? "Redirecting to checkout…" : "Buy Now — $100"}
         </button>
         <p className="text-xs text-stone-400 mt-3">
-          Secure checkout via Stripe &middot; 30-day money-back guarantee
+          Secure checkout via Stripe
         </p>
       </div>
 

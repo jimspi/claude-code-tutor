@@ -112,7 +112,7 @@ export default function LessonPage() {
             Enjoying the course?
           </p>
           <p className="text-white font-heading text-lg font-bold mb-1">
-            Unlock all 27 lessons for $100
+            Unlock all lessons
           </p>
           <p className="text-stone-400 text-sm mb-4">
             One-time payment. Lifetime access.

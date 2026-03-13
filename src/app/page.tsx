@@ -85,7 +85,7 @@ function LandingPage() {
             href="/pricing"
             className="px-7 py-3 bg-white text-slate-900 font-semibold text-sm rounded-xl hover:bg-stone-100 transition-colors border border-stone-200 shadow-sm"
           >
-            Unlock Full Course — $100
+            Unlock Full Course
           </Link>
         </div>
         <p className="text-sm text-stone-400 mb-4">

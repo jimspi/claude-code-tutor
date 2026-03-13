@@ -6,7 +6,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-const MASTER_CODE = process.env.MASTER_ACCESS_CODE!;
+const MASTER_CODE = (process.env.MASTER_ACCESS_CODE || "").trim().toLowerCase();
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const trimmedCode = code.trim().toLowerCase();
 
     // Master code — always works, creates a new session each time
-    if (trimmedCode === MASTER_CODE.toLowerCase()) {
+    if (MASTER_CODE && trimmedCode === MASTER_CODE) {
       const newSessionId = crypto.randomUUID();
 
       // Upsert master code row (reuse the same row, just update session)

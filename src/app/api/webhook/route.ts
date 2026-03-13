@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
+import crypto from "crypto";
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -11,6 +12,16 @@ function getSupabaseAdmin() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
+}
+
+/** Generate a short, readable access code like "cca-a7f3-x9k2" */
+function generateCode(): string {
+  const chars = "abcdefghjkmnpqrstuvwxyz23456789"; // no ambiguous chars
+  const segment = () =>
+    Array.from(crypto.randomBytes(4))
+      .map((b) => chars[b % chars.length])
+      .join("");
+  return `cca-${segment()}-${segment()}`;
 }
 
 export async function POST(req: NextRequest) {
@@ -37,28 +48,26 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const userId = session.metadata?.user_id;
+    const email = session.customer_details?.email || session.customer_email || "unknown";
 
-    if (!userId) {
-      console.error("No user_id in session metadata");
-      return NextResponse.json({ error: "No user_id" }, { status: 400 });
-    }
+    const code = generateCode();
 
-    // Mark user as paid via Supabase admin API
     const supabaseAdmin = getSupabaseAdmin();
-    const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
-      user_metadata: { paid: true, paid_at: new Date().toISOString() },
+    const { error } = await supabaseAdmin.from("access_codes").insert({
+      code,
+      email,
+      stripe_session_id: session.id,
     });
 
     if (error) {
-      console.error("Failed to update user metadata:", error);
+      console.error("Failed to insert access code:", error);
       return NextResponse.json(
-        { error: "Failed to update user" },
+        { error: "Failed to create access code" },
         { status: 500 }
       );
     }
 
-    console.log(`User ${userId} marked as paid`);
+    console.log(`Access code ${code} created for ${email} (session: ${session.id})`);
   }
 
   return NextResponse.json({ received: true });

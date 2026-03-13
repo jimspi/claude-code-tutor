@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import PaywallGate from "@/components/PaywallGate";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAccess } from "@/contexts/AccessContext";
 
 type Tab = "terminal" | "prompts" | "claudemd";
 
@@ -232,8 +232,8 @@ function CopyButton({ text }: { text: string }) {
 }
 
 export default function CheatSheetPage() {
-  const { paid, loading } = useAuth();
-  if (!loading && !paid) return <PaywallGate />;
+  const { hasAccess, loading } = useAccess();
+  if (!loading && !hasAccess) return <PaywallGate />;
   const [activeTab, setActiveTab] = useState<Tab>("terminal");
 
   return (

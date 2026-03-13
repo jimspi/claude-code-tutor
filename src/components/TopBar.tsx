@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { getOverallProgress, getCurrentBadge } from "@/lib/progress";
 import ProgressBar from "./ProgressBar";
 import Badge from "./Badge";
-import AuthButton from "./AuthButton";
+import CodeEntry from "./CodeEntry";
 
 interface TopBarProps {
   onMenuClick: () => void;
@@ -63,7 +63,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
 
         <div className="flex items-center gap-3">
           {badge && <Badge title={badge} earned size="sm" />}
-          <AuthButton />
+          <CodeEntry />
         </div>
       </div>
     </header>

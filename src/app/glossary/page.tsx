@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import PaywallGate from "@/components/PaywallGate";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAccess } from "@/contexts/AccessContext";
 import { glossaryEntries } from "@/data/glossary";
 
 export default function GlossaryPage() {
-  const { paid, loading } = useAuth();
+  const { hasAccess, loading } = useAccess();
   const [search, setSearch] = useState("");
 
-  if (!loading && !paid) return <PaywallGate />;
+  if (!loading && !hasAccess) return <PaywallGate />;
 
   const filtered = search.trim()
     ? glossaryEntries.filter(

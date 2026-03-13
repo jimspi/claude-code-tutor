@@ -1,26 +1,22 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useAuth } from "./AuthContext";
+import { useAccess } from "./AccessContext";
 import { initProgress } from "@/lib/progress";
 
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  const prevUserId = useRef<string | null | undefined>(undefined);
+  const { hasAccess, loading } = useAccess();
+  const initialized = useRef(false);
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || initialized.current) return;
+    initialized.current = true;
 
-    const userId = user?.id ?? null;
-
-    // Skip if the user hasn't changed
-    if (prevUserId.current === userId) return;
-    prevUserId.current = userId;
-
-    initProgress(userId).then(() => {
+    // No user ID needed — progress is stored in localStorage only
+    initProgress(null).then(() => {
       window.dispatchEvent(new Event("progress-update"));
     });
-  }, [user, loading]);
+  }, [hasAccess, loading]);
 
   return <>{children}</>;
 }

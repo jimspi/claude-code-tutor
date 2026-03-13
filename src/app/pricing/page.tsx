@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import PaywallGate from "@/components/PaywallGate";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAccess } from "@/contexts/AccessContext";
 
 export default function PricingPage() {
-  const { paid } = useAuth();
+  const { hasAccess } = useAccess();
 
-  if (paid) {
+  if (hasAccess) {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center">
         <div className="w-14 h-14 mx-auto mb-5 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-center">

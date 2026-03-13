@@ -9,13 +9,13 @@ import LessonComplete from "@/components/LessonComplete";
 import TryItForReal from "@/components/TryItForReal";
 import AudioReader from "@/components/AudioReader";
 import PaywallGate from "@/components/PaywallGate";
-import { useAuth, FREE_LESSONS } from "@/contexts/AuthContext";
+import { useAccess, FREE_LESSONS } from "@/contexts/AccessContext";
 
 export default function LessonPage() {
   const params = useParams();
   const levelId = params.levelId as string;
   const lessonId = params.lessonId as string;
-  const { user, loading, paid } = useAuth();
+  const { hasAccess, loading } = useAccess();
 
   const level = getLevelById(levelId);
   const lesson = getLessonById(levelId, lessonId);
@@ -23,15 +23,9 @@ export default function LessonPage() {
   const { prev, next } = getAdjacentLessons(levelId, lessonId);
 
   const isFreeLesson = FREE_LESSONS.includes(lessonId);
-  const hasAccess = paid || isFreeLesson;
 
-  // Not signed in and not a free lesson — show paywall
-  if (!loading && !user && !isFreeLesson) {
-    return <PaywallGate />;
-  }
-
-  // Signed in but not paid and not a free lesson — show paywall
-  if (!loading && user && !hasAccess) {
+  // No access and not a free lesson — show code entry gate
+  if (!loading && !hasAccess && !isFreeLesson) {
     return <PaywallGate />;
   }
 
@@ -57,7 +51,7 @@ export default function LessonPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Free lesson badge */}
-      {isFreeLesson && !paid && (
+      {isFreeLesson && !hasAccess && (
         <div className="mb-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-xs font-medium text-teal-700">
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -112,7 +106,7 @@ export default function LessonPage() {
       <AudioReader blocks={content.blocks} />
 
       {/* Upsell at bottom of free lesson */}
-      {isFreeLesson && !paid && user && (
+      {isFreeLesson && !hasAccess && (
         <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-center">
           <p className="text-teal-400 text-xs font-bold uppercase tracking-widest mb-2">
             Enjoying the course?

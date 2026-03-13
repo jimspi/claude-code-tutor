@@ -1,11 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import PaywallGate from "@/components/PaywallGate";
+import { CodeForm } from "@/components/CodeEntry";
 import { useAccess } from "@/contexts/AccessContext";
 
 export default function PricingPage() {
   const { hasAccess } = useAccess();
+  const [buying, setBuying] = useState(false);
+
+  async function handleBuy() {
+    setBuying(true);
+    try {
+      const res = await fetch("/api/checkout", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Something went wrong");
+        setBuying(false);
+      }
+    } catch {
+      alert("Something went wrong");
+      setBuying(false);
+    }
+  }
 
   if (hasAccess) {
     return (
@@ -32,23 +51,44 @@ export default function PricingPage() {
   }
 
   return (
-    <div>
-      <div className="max-w-4xl mx-auto px-4 pt-12 pb-4 text-center">
-        <nav className="mb-8">
-          <Link href="/" className="text-sm text-stone-400 hover:text-teal-600 transition-colors">
-            &larr; Back to course
-          </Link>
-        </nav>
-        <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">
-          Invest in yourself for $100
+    <div className="max-w-lg mx-auto px-4 py-12">
+      <nav className="mb-8 text-center">
+        <Link href="/" className="text-sm text-stone-400 hover:text-teal-600 transition-colors">
+          &larr; Back to course
+        </Link>
+      </nav>
+
+      {/* Buy section */}
+      <div className="text-center mb-10">
+        <h1 className="font-heading text-3xl font-extrabold text-slate-900 mb-3">
+          Get Full Course Access
         </h1>
-        <p className="text-stone-600 max-w-xl mx-auto leading-relaxed">
-          Claude Code is the magic wand that turns your ideas into real software.
-          This course teaches you to use it — from your first conversation to a
-          live site on the internet. Small price to pay for a superpower.
+        <p className="text-stone-600 leading-relaxed mb-6">
+          One-time payment. Lifetime access to all lessons, exercises, and future updates.
+        </p>
+        <button
+          onClick={handleBuy}
+          disabled={buying}
+          className="px-8 py-3 bg-teal-600 text-white font-semibold text-sm rounded-xl hover:bg-teal-700 transition-colors shadow-lg disabled:opacity-50"
+        >
+          {buying ? "Redirecting to checkout…" : "Buy Now — $100"}
+        </button>
+        <p className="text-xs text-stone-400 mt-3">
+          Secure checkout via Stripe &middot; 30-day money-back guarantee
         </p>
       </div>
-      <PaywallGate />
+
+      {/* Divider */}
+      <div className="flex items-center gap-4 mb-8">
+        <div className="flex-1 h-px bg-stone-200" />
+        <span className="text-xs text-stone-400 font-medium uppercase tracking-wider">
+          Already have a code?
+        </span>
+        <div className="flex-1 h-px bg-stone-200" />
+      </div>
+
+      {/* Code entry */}
+      <CodeForm />
     </div>
   );
 }

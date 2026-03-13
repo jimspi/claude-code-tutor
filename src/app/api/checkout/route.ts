@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { createClient } from "@/lib/supabase/server";
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -8,29 +7,11 @@ function getStripe() {
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
-
-    // Check if already paid
-    if (user.user_metadata?.paid === true) {
-      return NextResponse.json({ error: "Already purchased" }, { status: 400 });
-    }
-
     const origin = req.headers.get("origin") || "http://localhost:3000";
 
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      customer_email: user.email,
-      metadata: {
-        user_id: user.id,
-      },
       line_items: [
         {
           price_data: {
@@ -46,7 +27,7 @@ export async function POST(req: NextRequest) {
         },
       ],
       success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/?canceled=true`,
+      cancel_url: `${origin}/pricing`,
     });
 
     return NextResponse.json({ url: session.url });

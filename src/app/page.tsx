@@ -61,10 +61,7 @@ function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 pt-16 pb-12 sm:pt-24 sm:pb-16 text-center">
-        <span className="inline-block text-xs font-bold uppercase tracking-[0.15em] text-teal-600 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full mb-6">
-          Learn to work with the tools of tomorrow
-        </span>
+      <section className="max-w-4xl mx-auto px-6 pt-8 pb-12 sm:pt-12 sm:pb-16 text-center">
         <h2 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.1] mb-5">
           Learn to create with{" "}
           <span className="text-teal-600">the tools of tomorrow</span>
@@ -91,16 +88,6 @@ function LandingPage() {
         <p className="text-sm text-stone-400 mb-4">
           {totalLessons} lessons &middot; ~{totalHours} hours &middot; Lifetime access
         </p>
-        <div className="inline-flex items-start gap-2.5 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-left max-w-md mx-auto">
-          <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <p className="text-xs text-amber-800 leading-relaxed">
-            <span className="font-semibold">Note:</span> To actively build with Claude Code, you&apos;ll need a{" "}
-            <span className="font-semibold">Claude Pro subscription ($20/month)</span> from Anthropic.
-            This course teaches you how to use it.
-          </p>
-        </div>
       </section>
 
       {/* Course outline */}
@@ -151,6 +138,16 @@ function LandingPage() {
               </div>
             );
           })}
+        </div>
+        <div className="mt-10 inline-flex items-start gap-2.5 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-left max-w-md mx-auto">
+          <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-xs text-amber-800 leading-relaxed">
+            <span className="font-semibold">Note:</span> To actively build with Claude Code, you&apos;ll need a{" "}
+            <span className="font-semibold">Claude Pro subscription ($20/month)</span> from Anthropic.
+            This course teaches you how to use it.
+          </p>
         </div>
       </section>
 

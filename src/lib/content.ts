@@ -78,7 +78,7 @@ export const lessonContent: Record<string, LessonContent> = {
       },
       {
         type: "paragraph",
-        text: "Let's start with the simplest possible explanation. Claude Code is a tool that lives in your terminal (that black or white window where you type commands) and lets you build software by describing what you want in plain English.",
+        text: "Let's start with the simplest possible explanation. Claude Code is a tool that lives in your terminal (that black or white window where you type commands) and lets you create things by describing what you want in plain English.",
       },
       {
         type: "paragraph",
@@ -136,11 +136,11 @@ export const lessonContent: Record<string, LessonContent> = {
       {
         type: "concept",
         title: "The big picture",
-        text: "Claude Code is not replacing developers. It's making the power of software creation accessible to everyone. Whether you're a small business owner who needs a website, a creative person with an app idea, or a developer who wants to move ten times faster, Claude Code meets you where you are.",
+        text: "Claude Code is not replacing developers. It's making the power of creation accessible to everyone. Whether you're a small business owner who needs a website, a creative person with an app idea, or a developer who wants to move ten times faster, Claude Code meets you where you are.",
       },
       {
         type: "tip",
-        text: "You don't need to understand everything right now. The most important takeaway from this lesson is simple: Claude Code lets you build real software by having a conversation. Everything else, you'll learn by doing.",
+        text: "You don't need to understand everything right now. The most important takeaway from this lesson is simple: Claude Code lets you build real things by having a conversation. Everything else, you'll learn by doing.",
       },
     ],
   },
@@ -782,7 +782,7 @@ export const lessonContent: Record<string, LessonContent> = {
       },
       {
         type: "paragraph",
-        text: "GitHub is used by virtually every professional developer in the world. By setting it up now, you're giving your projects a real home and learning a workflow that will serve you for as long as you build software.",
+        text: "GitHub is used by virtually every professional developer in the world. By setting it up now, you're giving your projects a real home and learning a workflow that will serve you for as long as you keep creating.",
       },
       {
         type: "subheading",
@@ -2191,7 +2191,7 @@ export const lessonContent: Record<string, LessonContent> = {
       },
       {
         type: "tip",
-        text: "The #1 rule when things go wrong: don't panic and don't start over. Errors are a normal part of building software. Claude Code is excellent at diagnosing and fixing problems. Just describe what's happening and let Claude handle it.",
+        text: "The #1 rule when things go wrong: don't panic and don't start over. Errors are a normal part of the process. Claude Code is excellent at diagnosing and fixing problems. Just describe what's happening and let Claude handle it.",
       },
     ],
   },
@@ -2231,7 +2231,7 @@ export const lessonContent: Record<string, LessonContent> = {
         type: "comparison",
         left: {
           title: "Old-School Deployment",
-          text: "Buy a server. Set up the operating system. Install software. Configure security. Upload your files manually. Fix permissions. Set up SSL certificates. Maintain everything yourself. Hope nothing breaks at 3 AM.",
+          text: "Buy a server. Set up the operating system. Install everything. Configure security. Upload your files manually. Fix permissions. Set up SSL certificates. Maintain everything yourself. Hope nothing breaks at 3 AM.",
         },
         right: {
           title: "With Vercel",
@@ -3380,7 +3380,7 @@ export const lessonContent: Record<string, LessonContent> = {
       },
       {
         type: "paragraph",
-        text: "You've made it through the entire Claude Code Academy. That's not a small thing. You started knowing nothing about coding or command lines, and now you have the skills to build real software through conversation. Let's talk about what comes next.",
+        text: "You've made it through the entire Claude Code Academy. That's not a small thing. You started knowing nothing about coding or command lines, and now you have the skills to build real things through conversation. Let's talk about what comes next.",
       },
       {
         type: "subheading",
@@ -3440,7 +3440,7 @@ export const lessonContent: Record<string, LessonContent> = {
       {
         type: "concept",
         title: "You've earned this",
-        text: "Completing Claude Code Academy means you've gone from absolute beginner to someone who can confidently build software with AI. You understand the terminal, you write effective prompts, you iterate and refine, you handle errors, and you know the advanced patterns that power users rely on. That's a real skill that very few people have right now.",
+        text: "Completing Claude Code Academy means you've gone from absolute beginner to someone who can confidently work with the tools of tomorrow. You understand the terminal, you write effective prompts, you iterate and refine, you handle errors, and you know the advanced patterns that power users rely on. That's a real skill that very few people have right now.",
       },
       {
         type: "tip",

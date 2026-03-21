@@ -63,11 +63,11 @@ function LandingPage() {
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-16 pb-12 sm:pt-24 sm:pb-16 text-center">
         <span className="inline-block text-xs font-bold uppercase tracking-[0.15em] text-teal-600 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full mb-6">
-          Learn to build real software with AI
+          Learn to work with the tools of tomorrow
         </span>
         <h2 className="font-heading text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-slate-900 leading-[1.1] mb-5">
-          Learn to build real software{" "}
-          <span className="text-teal-600">with AI</span>
+          Learn to create with{" "}
+          <span className="text-teal-600">the tools of tomorrow</span>
         </h2>
         <p className="text-lg text-stone-500 max-w-2xl mx-auto leading-relaxed mb-8">
           Claude Code turns your ideas into working apps. This course teaches you
@@ -272,9 +272,9 @@ function Dashboard() {
           Claude Code Academy
         </h1>
         <p className="text-lg text-stone-600 mt-4 max-w-2xl leading-relaxed">
-          Learn to build real software by having conversations with AI. No
-          coding experience needed. Start from zero and become a confident
-          builder, one lesson at a time.
+          Learn to bring your ideas to life by having conversations with AI. No
+          experience needed. Start from zero and become a confident
+          creator, one lesson at a time.
         </p>
         <p className="text-sm text-stone-400 mt-2">
           {levels.reduce((s, l) => s + l.lessons.length, 0)} lessons &middot; About {totalHours} hours total
